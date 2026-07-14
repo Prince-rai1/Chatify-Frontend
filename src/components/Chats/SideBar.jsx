@@ -4,17 +4,20 @@ import ContactCard from "./ContactCard";
 import ProfileCard from "./ProfileCard";
 import axios from "../../services/axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setChats, setContacts, setSelectedChat } from "../../redux/chat/chatSlice";
+import { setChats, setContacts, setLoadingChats, setSelectedChat } from "../../redux/chat/chatSlice";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState("chats");
   const dispatch = useDispatch();
-  const { contacts, chats} = useSelector((state) => state.chat);
+  const { contacts, chats, isLoadingChats} = useSelector((state) => state.chat);
   const { user, onlineUsers } = useSelector((state) => state.auth);
 
   useEffect(() => {
+
+    setLoadingChats(true)
     const getContactUsers = async () => {
       try {
         const res = await axios.get("/user/contacts");
@@ -40,6 +43,8 @@ function Sidebar() {
 
     getChatUsers();
     getContactUsers();
+
+    setLoadingChats(false)
   }, [dispatch]);
 
   return (
@@ -78,7 +83,7 @@ function Sidebar() {
 
       {/* List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
-        {activeTab === "chats"
+      {  isLoadingChats?(<SidebarSkeleton/>):activeTab === "chats"
           ? chats.map((chat) => <ChatCard key={chat._id} chat={chat} onClick={()=>dispatch(setSelectedChat(chat))} online = {onlineUsers.includes(chat?._id)}/>)
           : contacts.map((contact) => (
               <ContactCard key={contact._id} contact={contact} onClick = {() => dispatch(setSelectedChat(contact))} online = {onlineUsers.includes(contact?._id)}/>
