@@ -26,15 +26,15 @@ function ProfileCard({ user }) {
         {/* Avatar */}
         <div className="relative">
 
-          {user.profilePicture ? (
+          {user?.profilePicture ? (
             <img
-              src={user.profilePicture.url}
-              alt={user.fullname}
+              src={user?.profilePicture.url}
+              alt={user?.fullname}
               className="h-12 w-12 rounded-full object-cover"
             />
           ) : (
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 font-semibold text-white">
-              {user.fullname
+              {user?.fullname
                 .split(" ")
                 .map((word) => word[0])
                 .join("")
@@ -50,11 +50,11 @@ function ProfileCard({ user }) {
         {/* User Info */}
         <div>
           <h3 className="font-medium text-white">
-            {user.fullname}
+            {user?.fullname}
           </h3>
 
           <p className="text-sm text-zinc-400">
-            @{user.username}
+            @{user?.username}
           </p>
         </div>
 
