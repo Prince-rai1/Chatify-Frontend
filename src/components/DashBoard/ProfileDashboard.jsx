@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../services/axios";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { logout, updateuser } from "../../redux/auth/authSlice";
+import { logout, updateuser, updateFullName, updateUserName } from "../../redux/auth/authSlice";
 import { clearChat } from "../../redux/chat/chatSlice";
+import { fullNameSchema, userNameSchema } from "../../schemas/userSchema";
 
 function ProfileDashboard({ user }) {
   const navigate = useNavigate();
@@ -53,6 +54,39 @@ function ProfileDashboard({ user }) {
     }
   };
 
+  const newFullName = async (FullName) => {
+        try {
+          const res = await axios.patch("/user/update-fullname", {fullname : FullName})
+          dispatch(updateFullName(res.data.data))
+          toast.success(res.data.message)
+        } catch (error) {
+           console.log(error.response.data.message)
+           toast.error(error.response.data.message)
+        }
+  }
+
+   const newUserName = async (updatedUserName) => {
+        try {
+          const res = await axios.patch("/user/update-username", {username : updatedUserName})
+          dispatch(updateUserName(res.data.data))
+          toast.success(res.data.message)
+        } catch (error) {
+           console.log(error.response.data.message)
+           toast.error(error.response.data.message)
+        }
+  }
+
+  const updatePassword = async (updatedPassword) => {
+        try {
+          console.log(updatedPassword)
+          const res = await axios.patch("/user/update-password", updatedPassword)
+          toast.success(res.data.message)
+        } catch (error) {
+           console.log(error.response.data.message)
+           toast.error(error.response.data.message)
+        }
+  }
+
   return (
     <div className="flex h-full flex-col bg-zinc-950">
       {/* Header */}
@@ -93,18 +127,22 @@ function ProfileDashboard({ user }) {
             <EditableField
               label="Full Name"
               value={user.fullname}
-              onSave={(value) => console.log(value)}
+              onSave={(value) => newFullName(value)}
+              fieldname = "fullname"
+              schema = {fullNameSchema}
             />
 
             <EditableField
               label="Username"
               value={user.username}
-              onSave={(value) => console.log(value)}
+              onSave={(value) => newUserName(value)}
+              fieldname = "username"
+              schema = {userNameSchema}
             />
 
             <EditableField label="Email" value={user.email} readOnly />
 
-            <ChangePassword />
+            <ChangePassword  onSave={(updatedPassword) => updatePassword(updatedPassword)}/>
 
             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
               <h3 className="mb-4 text-lg font-semibold text-white">Account</h3>

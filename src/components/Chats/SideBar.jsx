@@ -4,7 +4,7 @@ import ContactCard from "./ContactCard";
 import ProfileCard from "./ProfileCard";
 import axios from "../../services/axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setChats, setContacts, setLoadingChats, setSelectedChat } from "../../redux/chat/chatSlice";
+import { resetUnreadCount, setChats, setContacts, setLoadingChats, setSelectedChat } from "../../redux/chat/chatSlice";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
@@ -17,16 +17,18 @@ function Sidebar() {
 
   useEffect(() => {
 
-    setLoadingChats(true)
+    dispatch(setLoadingChats(true))
+    
     const getContactUsers = async () => {
       try {
         const res = await axios.get("/user/contacts");
 
         dispatch(setContacts(res.data.data));
       } catch (error) {
-        console.log(error.message);
-        console.log(error.response?.data?.message);
         toast.error(error.response?.data?.message);
+      }
+      finally{
+         dispatch(setLoadingChats(false))
       }
     };
 
@@ -35,16 +37,17 @@ function Sidebar() {
         const res = await axios.get("/messages/chats");
         dispatch(setChats(res.data.data));
       } catch (error) {
-        console.log(error.message);
-        console.log(error.response?.data?.message);
         toast.error(error.response?.data?.message);
+      }
+      finally{
+         dispatch(setLoadingChats(false))
       }
     };
 
     getChatUsers();
     getContactUsers();
 
-    setLoadingChats(false)
+   
   }, [dispatch]);
 
   return (
@@ -84,7 +87,7 @@ function Sidebar() {
       {/* List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
       {  isLoadingChats?(<SidebarSkeleton/>):activeTab === "chats"
-          ? chats.map((chat) => <ChatCard key={chat._id} chat={chat} onClick={()=>dispatch(setSelectedChat(chat))} online = {onlineUsers.includes(chat?._id)}/>)
+          ? chats.map((chat) => <ChatCard key={chat._id} chat={chat} onClick={()=>{dispatch(setSelectedChat(chat)); dispatch(resetUnreadCount(chat._id))}} online = {onlineUsers.includes(chat?._id)}/>)
           : contacts.map((contact) => (
               <ContactCard key={contact._id} contact={contact} onClick = {() => dispatch(setSelectedChat(contact))} online = {onlineUsers.includes(contact?._id)}/>
             ))}

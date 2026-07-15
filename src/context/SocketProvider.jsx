@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { setonlineusers } from "../redux/auth/authSlice";
-import { addMessage, markChatSeen } from "../redux/chat/chatSlice";
+import { addMessage, markChatSeen, updateChat } from "../redux/chat/chatSlice";
 
 const SocketContext = createContext(null);
 
@@ -30,8 +30,6 @@ function SocketProvider({ children }) {
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      console.log("Socket Connected:", newSocket.id);
-
       newSocket.emit("user-connected", user._id);
     });
 
@@ -40,16 +38,21 @@ function SocketProvider({ children }) {
     });
 
     newSocket.on("new-message", (newMessage) => {
+      dispatch(
+        updateChat({
+          newMessage,
+          currentUserId: user._id,
+          selectedChatId: selectedChatRef.current?._id,
+        }),
+      );
+
       if (selectedChatRef.current?._id === newMessage.sender) {
         dispatch(addMessage(newMessage));
-      } else {
-        console.log("Notification");
       }
     });
 
     newSocket.on("messages-seen", ({ seenBy }) => {
-      console.log("Seen by:", seenBy);
-       dispatch(markChatSeen(seenBy));
+      dispatch(markChatSeen(seenBy));
     });
 
     newSocket.on("disconnect", (onlineUsers) => {

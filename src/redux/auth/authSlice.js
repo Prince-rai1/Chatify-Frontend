@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { act } from "react";
 
 const initialState = {
   user: null,
   isLoggedIn: false,
   isCheckingAuth: true,
-  onlineUsers : []
+  onlineUsers: [],
 };
 
 const authSlice = createSlice({
@@ -21,18 +22,25 @@ const authSlice = createSlice({
       state.user = null;
       state.isLoggedIn = false;
       state.isCheckingAuth = false;
-      state.onlineUsers = []
+      state.onlineUsers = [];
     },
 
-    updateuser : (state, action) => {
-      state.user = action.payload
+    updateuser: (state, action) => {
+      state.user = action.payload;
     },
-    
-    setonlineusers : (state,action)=>{
-      state.onlineUsers = action.payload
-    }
+
+    setonlineusers: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
+    updateFullName: (state, action) => {
+      state.user.fullname = action.payload;
+    },
+
+    updateUserName: (state, action) => {
+      state.user.username = action.payload;
+    },
   },
 });
 
-export const { login, logout, updateuser, setonlineusers } = authSlice.actions;
+export const { login, logout, updateuser, setonlineusers, updateFullName, updateUserName } = authSlice.actions;
 export default authSlice.reducer;

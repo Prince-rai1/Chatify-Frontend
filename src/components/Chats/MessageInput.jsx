@@ -3,7 +3,11 @@ import { Smile, Paperclip, SendHorizontal } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import axios from "../../services/axios";
-import { addMessage, replaceMessage } from "../../redux/chat/chatSlice";
+import {
+  addMessage,
+  replaceMessage,
+  updateChat,
+} from "../../redux/chat/chatSlice";
 
 function MessageInput() {
   const textareaRef = useRef(null);
@@ -11,7 +15,7 @@ function MessageInput() {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
   const { selectedChat } = useSelector((state) => state.chat);
-  const {user} = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleInput = (e) => {
@@ -38,20 +42,17 @@ function MessageInput() {
       setMessage("");
       setImage(null);
 
-      console.log(localImageUrl)
-
-
       const optimisticUi = {
         _id: tempId,
         message: currentmessage,
-        image:{ url : localImageUrl},
+        image: { url: localImageUrl },
         sender: user._id,
         createdAt: new Date().toISOString(),
         isSeen: false,
         status: "sent",
       };
 
-      dispatch(addMessage(optimisticUi))
+      dispatch(addMessage(optimisticUi));
 
       formData.append("message", currentmessage);
       if (currentImage) {
@@ -63,7 +64,15 @@ function MessageInput() {
         formData,
       );
 
-      dispatch(replaceMessage({tempId, realMessage : res.data.data}));
+      dispatch(replaceMessage({ tempId, realMessage: res.data.data }));
+
+      dispatch(
+        updateChat({
+          newMessage: res.data.data,
+          currentUserId: user._id,
+          selectedChatId: selectedChat._id,
+        }),
+      );
 
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";

@@ -1,10 +1,6 @@
-import React from "react";
 
 function ChatCard({
   chat,
-  lastMessage,
-  time="10:30",
-  unread = 2,
   online,
   onClick
 }) {
@@ -48,12 +44,12 @@ function ChatCard({
 
         <div className="mt-1 flex items-center justify-between">
           <p className="truncate text-sm text-zinc-400">
-            {lastMessage}
+            {chat.lastMessage || (chat.lastImage?.url ? "📷 Photo" : "")}
           </p>
 
-          {unread > 0 && (
+          {chat.unreadCount > 0 && (
             <span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-600 px-1.5 text-xs text-white">
-              {unread}
+              {chat.unreadCount}
             </span>
           )}
         </div>

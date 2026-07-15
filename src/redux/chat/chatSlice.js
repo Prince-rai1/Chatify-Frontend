@@ -43,6 +43,44 @@ const chatSlice = createSlice({
       });
     },
 
+    updateChat: (state, action) => {
+      const { newMessage, currentUserId, selectedChatId } = action.payload;
+
+      // Partner kaun hai?
+      const partnerId =
+        newMessage.sender === currentUserId
+          ? newMessage.receiver
+          : newMessage.sender;
+
+      // Chat find karo
+      const index = state.chats.findIndex((chat) => chat._id === partnerId);
+
+      if (index === -1) return;
+
+      // Chat copy nikalo
+      const chat = state.chats[index];
+
+      // Latest Message
+      chat.lastMessage =
+        newMessage.message || (newMessage.image?.url ? "📷 Photo" : "");
+
+      // Latest Image
+      chat.lastImage = newMessage.image;
+
+      // Latest Time
+      chat.lastMessageTime = newMessage.createdAt;
+
+      // Unread Count
+      if (newMessage.sender !== currentUserId && selectedChatId !== partnerId) {
+        chat.unreadCount += 1;
+      }
+
+      // Move Top
+      state.chats.splice(index, 1);
+
+      state.chats.unshift(chat);
+    },
+
     clearChat: (state) => {
       state.chats = [];
       state.contacts = [];
@@ -54,6 +92,13 @@ const chatSlice = createSlice({
       const index = state.messages.findIndex((msg) => msg._id === tempId);
       if (index !== -1) {
         state.messages[index] = realMessage; // temp ko asli data se replace
+      }
+    },
+    resetUnreadCount: (state, action) => {
+      const chat = state.chats.find((chat) => chat._id === action.payload);
+
+      if (chat) {
+        chat.unreadCount = 0;
       }
     },
 
@@ -77,7 +122,9 @@ export const {
   setLoadingChats,
   setLoadingMessages,
   replaceMessage,
-  markChatSeen
+  markChatSeen,
+  updateChat,
+  resetUnreadCount,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

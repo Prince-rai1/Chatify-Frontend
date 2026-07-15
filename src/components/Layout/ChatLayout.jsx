@@ -3,7 +3,7 @@ import ChatHeader from "../Chats/ChatHeader";
 import MessageInput from "../Chats/MessageInput";
 import MessageList from "../Chats/MessageList";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoadingMessages, setMessages } from "../../redux/chat/chatSlice";
+import { resetUnreadCount, setLoadingMessages, setMessages } from "../../redux/chat/chatSlice";
 import axios from "../../services/axios";
 import { toast } from "react-hot-toast";
 import MessageSkeleton from '../Skeletons/MessageSkeleton'
@@ -39,6 +39,7 @@ function ChatLayout() {
         const res = await axios.get(`/messages/${selectedChat._id}`);
 
         dispatch(setMessages(res.data.data));
+        // dispatch(resetUnreadCount(chat._id));
       } catch (error) {
         console.log(error.message);
         console.log(error.response?.data?.message);

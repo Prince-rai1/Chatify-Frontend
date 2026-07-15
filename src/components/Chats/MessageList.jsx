@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import MessageBubble from "./MessageBubble";
 import { useSelector } from "react-redux";
-import ImageMessageSkeleton from '../Skeletons/ImageMessageSkeleton'
 
 function MessageList({messages}) {
   const { user } = useSelector((state) => state.auth);
