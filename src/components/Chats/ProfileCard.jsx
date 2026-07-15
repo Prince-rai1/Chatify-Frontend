@@ -28,8 +28,8 @@ function ProfileCard({ user }) {
 
           {user?.profilePicture ? (
             <img
-              src={user?.profilePicture.url}
-              alt={user?.fullname}
+              src={user.profilePicture?.url}
+              alt={user.fullname}
               className="h-12 w-12 rounded-full object-cover"
             />
           ) : (
