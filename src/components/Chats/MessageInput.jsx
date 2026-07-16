@@ -33,9 +33,7 @@ function MessageInput() {
 
   const onEmojiClick = (emojiData) => {
     setMessage((prev) => prev + emojiData.emoji);
-    // 👈 yahan textarea ko refocus nahi kar rahe — isse mobile pe
-    // panel khula rehta hai taaki lagatar kai emojis pick kar sako,
-    // WhatsApp mein bhi aisa hi hota hai
+
   };
 
   const toggleEmojiPicker = () => {
@@ -90,6 +88,7 @@ function MessageInput() {
       dispatch(addMessage(optimisticUi));
 
       formData.append("message", currentMessage);
+      
       currentImages.forEach((file) => {
         formData.append("images", file);
       });
@@ -204,8 +203,8 @@ function MessageInput() {
       {showEmojiPicker && (
         <div
           className="
-            mt-3 h-[320px] w-full
-            sm:absolute sm:bottom-full sm:left-4 sm:mt-0 sm:mb-2 sm:h-[420px] sm:w-[350px]
+            mt-3 h-80 w-full
+            sm:absolute sm:bottom-full sm:left-4 sm:mt-0 sm:mb-2 sm:h-105 sm:w-87.5
           "
         >
           <EmojiPicker
