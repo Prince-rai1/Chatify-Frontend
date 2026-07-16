@@ -1,18 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessageBubble from "./MessageBubble";
+import ImageViewer from "./ImageViewer";
 import { useSelector } from "react-redux";
 
-function MessageList({messages}) {
+function MessageList({ messages }) {
   const { user } = useSelector((state) => state.auth);
-  const MessageEndRef = useRef()
+  const MessageEndRef = useRef();
+  const [viewer, setViewer] = useState(null); // { images, index } | null
 
- const scrollToBottom = () => {
+  const scrollToBottom = () => {
     MessageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const handleNavigate = (delta) => {
+    setViewer((prev) => {
+      if (!prev) return prev;
+      const total = prev.images.length;
+      const nextIndex = (prev.index + delta + total) % total;
+      return { ...prev, index: nextIndex };
+    });
+  };
 
   return (
     <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -25,12 +36,28 @@ function MessageList({messages}) {
             minute: "2-digit",
           })}
           isSender={message.sender === user._id}
-          status={message.isSeen ? "seen" : "sent"}
-          image={message?.image}
-          OnImageLoad = {scrollToBottom}
+          status={
+            message.status === "sending"
+              ? "sending"
+              : message.isSeen
+                ? "seen"
+                : "sent"
+          }
+          images={message?.images}
+          OnImageLoad={scrollToBottom}
+          onImageClick={(images, index) => setViewer({ images, index })}
         />
       ))}
       <div ref={MessageEndRef} />
+
+      {viewer && (
+        <ImageViewer
+          images={viewer.images}
+          index={viewer.index}
+          onClose={() => setViewer(null)}
+          onNavigate={handleNavigate}
+        />
+      )}
     </div>
   );
 }

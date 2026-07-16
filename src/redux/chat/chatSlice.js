@@ -62,11 +62,11 @@ const chatSlice = createSlice({
 
       // Latest Message
       chat.lastMessage =
-        newMessage.message || (newMessage.image?.url ? "📷 Photo" : "");
+        newMessage.message || (newMessage.images?.length ? "📷 Photo" : "");
 
-      // Latest Image
-      chat.lastImage = newMessage.image;
 
+      chat.lastImages = newMessage.images;
+      
       // Latest Time
       chat.lastMessageTime = newMessage.createdAt;
 

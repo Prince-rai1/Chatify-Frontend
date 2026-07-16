@@ -1,10 +1,8 @@
-
 function ChatCard({
   chat,
   online,
   onClick
 }) {
-
   return (
     <div onClick = {onClick} className="group flex cursor-pointer items-center gap-3 rounded-2xl p-3 transition-all duration-300 border border-zinc-800
         bg-zinc-900/60  hover:border-violet-500/50
@@ -44,7 +42,7 @@ function ChatCard({
 
         <div className="mt-1 flex items-center justify-between">
           <p className="truncate text-sm text-zinc-400">
-            {chat.lastMessage || (chat.lastImage?.url ? "📷 Photo" : "")}
+            {chat.lastMessage || (chat.lastImages?.length ? "📷 Photo" : "")}
           </p>
 
           {chat.unreadCount > 0 && (

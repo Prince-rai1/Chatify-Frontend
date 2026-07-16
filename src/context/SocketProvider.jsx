@@ -17,6 +17,7 @@ function SocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
 
   const selectedChatRef = useRef(null);
+   const chatsRef = useRef([]);
 
   useEffect(() => {
     selectedChatRef.current = selectedChat;
