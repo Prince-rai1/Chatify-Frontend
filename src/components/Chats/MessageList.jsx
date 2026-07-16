@@ -15,7 +15,7 @@ function MessageList({messages}) {
   }, [messages]);
 
   return (
-    <div className="h-full overflow-y-auto px-6 py-5">
+    <div className="flex-1 overflow-y-auto px-6 py-5">
       {messages.map((message) => (
         <MessageBubble
           key={message._id}
