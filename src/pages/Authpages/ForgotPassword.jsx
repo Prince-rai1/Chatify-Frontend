@@ -37,8 +37,6 @@ function ForgotPassword() {
       
       toast.success(res.data.message);
 
-      console.log(data.email)
-
       sessionStorage.setItem("pendingotp", data.email)
 
       navigate('/chatify/verify-otp')

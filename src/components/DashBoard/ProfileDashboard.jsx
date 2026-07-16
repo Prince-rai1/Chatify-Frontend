@@ -26,8 +26,6 @@ function ProfileDashboard({ user }) {
 
       dispatch(updateuser(res.data.data));
 
-      console.log(res.data.data);
-
       toast.success(res.data.message);
     } catch (error) {
       console.log(error);
@@ -78,7 +76,6 @@ function ProfileDashboard({ user }) {
 
   const updatePassword = async (updatedPassword) => {
         try {
-          console.log(updatedPassword)
           const res = await axios.patch("/user/update-password", updatedPassword)
           toast.success(res.data.message)
         } catch (error) {

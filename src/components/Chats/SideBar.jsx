@@ -51,7 +51,7 @@ function Sidebar() {
   }, [dispatch]);
 
   return (
-    <aside className="flex h-screen w-full flex-col border-r border-zinc-800 bg-zinc-950">
+    <aside className="flex h-dvh w-full flex-col border-r border-zinc-800 bg-zinc-950">
       {/* Header */}
       <div className="border-b border-zinc-800 p-5 h-20 bg-violet-600">
         <h2 className="text-2xl font-bold text-white text-center md:text-left">Chatify</h2>

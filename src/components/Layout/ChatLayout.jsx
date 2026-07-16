@@ -39,10 +39,8 @@ function ChatLayout() {
         const res = await axios.get(`/messages/${selectedChat._id}`);
 
         dispatch(setMessages(res.data.data));
-        // dispatch(resetUnreadCount(chat._id));
       } catch (error) {
         console.log(error.message);
-        console.log(error.response?.data?.message);
         toast.error(error.response?.data?.message || "Failed to load messages");
       } finally {
         dispatch(setLoadingMessages(false));
@@ -53,9 +51,9 @@ function ChatLayout() {
   }, [selectedChat, dispatch]);
 
   return (
-    <div className="flex h-screen flex-1  flex-col bg-zinc-950">
+    <div className="flex  h-dvh flex-1 overflow-hidden  flex-col bg-zinc-950">
       <ChatHeader {...selectedChat} online={onlineUsers.includes(selectedChat?._id)} />      
-      <div className="flex-1 overflow-y-auto px-6 py-5">
+      <div className="flex-1 overflow-hidden">
         <div className="mb-6 flex justify-center">
           <span className="rounded-full bg-zinc-800 px-4 py-1 text-xs text-zinc-400">
             Today
