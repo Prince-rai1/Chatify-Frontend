@@ -7,7 +7,6 @@ function ChatHeader({
   fullname ,
   profilePicture,
   online ,
-  lastSeen = "last seen 10:30 am" ,
 }) {
   
   const dispatch = useDispatch()
@@ -50,7 +49,7 @@ function ChatHeader({
               online ? "text-emerald-400" : "text-zinc-500"
             }`}
           >
-            {online ? "Online" : lastSeen}
+            {online ? "Online" : "Offline"}
           </p>
         </div>
 

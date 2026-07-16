@@ -52,7 +52,7 @@ function App() {
     );
   }
   return (
-    <div>
+    <div className="h-dvh overflow-hidden">
       <Toaster />
       <Outlet />
     </div>
