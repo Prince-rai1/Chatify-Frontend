@@ -2,9 +2,13 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { setonlineusers } from "../redux/auth/authSlice";
-import { addMessage, markChatSeen, updateChat, setChats } from "../redux/chat/chatSlice";
-import axios from "../services/axios"
-
+import {
+  addMessage,
+  markChatSeen,
+  updateChat,
+  setChats
+} from "../redux/chat/chatSlice";
+import axios from "../services/axios";
 
 const SocketContext = createContext(null);
 
@@ -12,12 +16,16 @@ export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }) {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
-  const { selectedChat } = useSelector((state) => state.chat);
+  const { selectedChat, chats } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
 
   const selectedChatRef = useRef(null);
-   const chatsRef = useRef([]);
+  const chatsRef = useRef([]);
+
+  useEffect(() => {
+    chatsRef.current = chats;
+  }, [chats]);
 
   useEffect(() => {
     selectedChatRef.current = selectedChat;
@@ -42,9 +50,13 @@ function SocketProvider({ children }) {
 
     newSocket.on("new-message", async (newMessage) => {
       const partnerId =
-        newMessage.sender === user._id ? newMessage.receiver : newMessage.sender;
+        newMessage.sender === user._id
+          ? newMessage.receiver
+          : newMessage.sender;
 
-      const chatExists = chatsRef.current.some((chat) => chat._id === partnerId);
+      const chatExists = chatsRef.current.some(
+        (chat) => chat._id === partnerId,
+      );
 
       if (!chatExists) {
         try {

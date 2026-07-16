@@ -46,7 +46,6 @@ const chatSlice = createSlice({
     updateChat: (state, action) => {
       const { newMessage, currentUserId, selectedChatId } = action.payload;
 
-      // Partner kaun hai?
       const partnerId =
         newMessage.sender === currentUserId
           ? newMessage.receiver
@@ -87,11 +86,12 @@ const chatSlice = createSlice({
       state.selectedChat = null;
       state.messages = [];
     },
+
     replaceMessage: (state, action) => {
       const { tempId, realMessage } = action.payload;
       const index = state.messages.findIndex((msg) => msg._id === tempId);
       if (index !== -1) {
-        state.messages[index] = realMessage; // temp ko asli data se replace
+        state.messages[index] = realMessage;
       }
     },
     resetUnreadCount: (state, action) => {
