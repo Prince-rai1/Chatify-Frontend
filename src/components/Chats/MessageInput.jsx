@@ -16,7 +16,7 @@ function MessageInput() {
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const [message, setMessage] = useState("");
-  const [images, setImages] = useState([]); // 👈 ab array
+  const [images, setImages] = useState([]);
   const { selectedChat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -30,11 +30,24 @@ function MessageInput() {
     textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
     textarea.style.overflowY = scrollHeight > maxHeight ? "auto" : "hidden";
   };
+
   const onEmojiClick = (emojiData) => {
     setMessage((prev) => prev + emojiData.emoji);
-
-    textareaRef.current?.focus();
+    // 👈 yahan textarea ko refocus nahi kar rahe — isse mobile pe
+    // panel khula rehta hai taaki lagatar kai emojis pick kar sako,
+    // WhatsApp mein bhi aisa hi hota hai
   };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => {
+      const next = !prev;
+      if (next) {
+        textareaRef.current?.blur(); // 👈 keyboard band, uski jagah emoji panel
+      }
+      return next;
+    });
+  };
+
   const handleFileSelect = (e) => {
     const selected = Array.from(e.target.files);
     setImages((prev) => {
@@ -44,7 +57,7 @@ function MessageInput() {
       }
       return combined.slice(0, MAX_IMAGES);
     });
-    e.target.value = ""; // taaki wahi file dobara select ho sake
+    e.target.value = "";
   };
 
   const sendMessage = async () => {
@@ -71,14 +84,14 @@ function MessageInput() {
         sender: user._id,
         createdAt: new Date().toISOString(),
         isSeen: false,
-        status: "sending", // 👈 "sent" ki jagah "sending" — yahi "sending mark" hai
+        status: "sending",
       };
 
       dispatch(addMessage(optimisticUi));
 
       formData.append("message", currentMessage);
       currentImages.forEach((file) => {
-        formData.append("images", file); // 👈 same field naam repeat, multer array() isko handle karega
+        formData.append("images", file);
       });
 
       const res = await axios.post(
@@ -106,7 +119,7 @@ function MessageInput() {
   };
 
   return (
-    <div className="border-t border-zinc-800 bg-zinc-950 p-4 ">
+    <div className="relative border-t border-zinc-800 bg-zinc-950 p-4">
       {/* Image Previews */}
       {images.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-2">
@@ -131,33 +144,22 @@ function MessageInput() {
       )}
 
       <div className="flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 px-4 py-3">
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-            className="text-zinc-400 hover:text-violet-400"
-          >
-            <Smile size={22} />
-          </button>
-
-          {showEmojiPicker && (
-            <div className="absolute bottom-14 left-0 z-50">
-              <EmojiPicker
-                theme="dark"
-                lazyLoadEmojis
-                searchDisabled={false}
-                skinTonesDisabled={false}
-                onEmojiClick={onEmojiClick}
-                emojiSize={908}
-              />
-            </div>
-          )}
-        </div>
+        <button
+          type="button"
+          onClick={toggleEmojiPicker}
+          className={`shrink-0 ${
+            showEmojiPicker
+              ? "text-violet-400"
+              : "text-zinc-400 hover:text-violet-400"
+          }`}
+        >
+          <Smile size={22} />
+        </button>
 
         <button
           type="button"
           onClick={() => fileInputRef.current.click()}
-          className="text-zinc-400 hover:text-violet-400"
+          className="shrink-0 text-zinc-400 hover:text-violet-400"
         >
           <Paperclip size={22} />
         </button>
@@ -176,6 +178,7 @@ function MessageInput() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onInput={handleInput}
+          onFocus={() => setShowEmojiPicker(false)}
           rows={1}
           placeholder="Type a message..."
           className="flex-1 resize-none overflow-hidden bg-transparent text-white placeholder:text-zinc-500 outline-none leading-6"
@@ -191,11 +194,32 @@ function MessageInput() {
           type="button"
           disabled={!message.trim() && images.length === 0}
           onClick={sendMessage}
-          className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <SendHorizontal size={20} />
         </button>
       </div>
+
+      {/* Emoji Picker — mobile pe keyboard ki jagah niche dock hoga, desktop pe floating popup */}
+      {showEmojiPicker && (
+        <div
+          className="
+            mt-3 h-[320px] w-full
+            sm:absolute sm:bottom-full sm:left-4 sm:mt-0 sm:mb-2 sm:h-[420px] sm:w-[350px]
+          "
+        >
+          <EmojiPicker
+            theme="dark"
+            lazyLoadEmojis
+            searchDisabled={false}
+            skinTonesDisabled={false}
+            onEmojiClick={onEmojiClick}
+            emojiSize={32}
+            width="100%"
+            height="100%"
+          />
+        </div>
+      )}
     </div>
   );
 }
