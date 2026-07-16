@@ -5,7 +5,7 @@ function DashBoard() {
 
     const {user} = useSelector((state) => state.auth)
   return (
-    <div>
+    <div className="h-full overflow-hidden">
         <ProfileDashboard user={user}/>
     </div>
   )
