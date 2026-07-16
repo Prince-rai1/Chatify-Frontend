@@ -26,7 +26,7 @@ function ProfileCard({ user }) {
         {/* Avatar */}
         <div className="relative">
 
-          {user?.profilePicture ? (
+          {user.profilePicture?.url ? (
             <img
               src={user.profilePicture?.url}
               alt={user.fullname}
