@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+  --app-height: 100vh;
+}

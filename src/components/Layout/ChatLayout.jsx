@@ -3,32 +3,35 @@ import ChatHeader from "../Chats/ChatHeader";
 import MessageInput from "../Chats/MessageInput";
 import MessageList from "../Chats/MessageList";
 import { useDispatch, useSelector } from "react-redux";
-import { resetUnreadCount, setLoadingMessages, setMessages } from "../../redux/chat/chatSlice";
+import {
+  resetUnreadCount,
+  setLoadingMessages,
+  setMessages,
+} from "../../redux/chat/chatSlice";
 import axios from "../../services/axios";
 import { toast } from "react-hot-toast";
-import MessageSkeleton from '../Skeletons/MessageSkeleton'
+import MessageSkeleton from "../Skeletons/MessageSkeleton";
 import { useSocket } from "../../context/SocketProvider";
 
-
 function ChatLayout() {
-  const { selectedChat, messages, isLoadingMessages } = useSelector((state) => state.chat);
-  const { onlineUsers } = useSelector((state) => state.auth)
+  const { selectedChat, messages, isLoadingMessages } = useSelector(
+    (state) => state.chat,
+  );
+  const { onlineUsers } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const socket = useSocket()
+  const socket = useSocket();
 
   useEffect(() => {
+    if (!socket) return;
 
-    if(!socket) return;
+    if (!selectedChat) return;
 
-    if(!selectedChat) return;
+    if (messages.length === 0) return;
 
-    if(messages.length===0) return;
-
-    socket.emit("mark-chat-seen",{
-        chatUserId:selectedChat._id
+    socket.emit("mark-chat-seen", {
+      chatUserId: selectedChat._id,
     });
-
-},[messages, selectedChat, socket]);
+  }, [messages, selectedChat, socket]);
 
   useEffect(() => {
     if (!selectedChat) return;
@@ -52,17 +55,19 @@ function ChatLayout() {
 
   return (
     <div className="flex  h-dvh flex-1 overflow-hidden  flex-col bg-zinc-950">
-      <ChatHeader {...selectedChat} online={onlineUsers.includes(selectedChat?._id)} />      
-      <div className="flex-1 overflow-hidden">
-        <div className="mb-6 flex justify-center">
-          <span className="rounded-full bg-zinc-800 px-4 py-1 text-xs text-zinc-400">
-            Today
-          </span>
-        </div>
-       {isLoadingMessages? <MessageSkeleton/> :<MessageList  messages = {messages}/>}
+      <ChatHeader
+        {...selectedChat}
+        online={onlineUsers.includes(selectedChat?._id)}
+      />
+      <div className="flex-1 min-h-0">
+        {isLoadingMessages ? (
+          <MessageSkeleton />
+        ) : (
+          <MessageList messages={messages} />
+        )}
       </div>
 
-      <MessageInput/>
+      <MessageInput />
     </div>
   );
 }
