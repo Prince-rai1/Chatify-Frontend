@@ -8,7 +8,7 @@ function Chat() {
   const {selectedChat} = useSelector((state) => state.chat)
 
   return (
-    <div className="flex overflow-hidden bg-zinc-950"   style={{ height: "var(--app-height)" }}>
+    <div className="flex h-dvh overflow-hidden bg-zinc-950" >
 
       {/* Sidebar */}
       <div
