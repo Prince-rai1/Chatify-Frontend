@@ -55,8 +55,8 @@ function SocketProvider({ children }) {
       dispatch(markChatSeen(seenBy));
     });
 
-    newSocket.on("disconnect", (onlineUsers) => {
-      dispatch(setonlineusers(onlineUsers));
+    newSocket.on("disconnect", () => {
+      dispatch(setonlineusers([]));
     });
 
     return () => {
