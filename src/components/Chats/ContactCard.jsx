@@ -1,24 +1,36 @@
-import React from "react";
-
 function ContactCard({ contact, online, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group flex cursor-pointer items-center gap-3 rounded-2xl p-3 transition-all duration-300 border border-zinc-800
-        bg-zinc-900/60  hover:border-violet-500/50
-        hover:bg-zinc-800"
+      className="
+        group
+        flex
+        cursor-pointer
+        items-center
+        gap-2
+        rounded-full
+        border
+        border-zinc-800
+        bg-zinc-900/60
+        p-2
+        transition-all
+        duration-300
+        hover:border-violet-500/50
+        hover:bg-zinc-800
+      "
     >
-      <div className="relative">
-        {contact?.profilePicture ? (
+      {/* Profile Picture */}
+      <div className="relative shrink-0">
+        {contact?.profilePicture?.url ? (
           <img
             src={contact.profilePicture.url}
             alt={contact.fullname}
-            className="h-12 w-12 rounded-full object-cover"
+            className="h-9 w-9 rounded-full object-cover sm:h-10 sm:w-10"
           />
         ) : (
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 font-semibold text-white">
-            {contact.fullname
-              .split(" ")
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white sm:h-10 sm:w-10">
+            {contact?.fullname
+              ?.split(" ")
               .map((word) => word[0])
               .join("")
               .slice(0, 2)}
@@ -26,15 +38,20 @@ function ContactCard({ contact, online, onClick }) {
         )}
 
         {online && (
-          <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-zinc-900 bg-emerald-500"></span>
+          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-zinc-900 bg-emerald-500 sm:h-3 sm:w-3" />
         )}
       </div>
 
-      <div>
-        <h3 className="font-semibold text-white">{contact.fullname}</h3>
+      {/* Contact Info */}
+      <div className="min-w-0">
+        <h3 className="truncate text-sm font-semibold text-white sm:text-[15px]">
+          {contact.fullname}
+        </h3>
 
         <p
-          className={`text-sm ${online ? "text-emerald-400" : "text-zinc-500"}`}
+          className={`text-xs sm:text-sm ${
+            online ? "text-emerald-400" : "text-zinc-500"
+          }`}
         >
           {online ? "Online" : "Offline"}
         </p>

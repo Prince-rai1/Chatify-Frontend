@@ -1,62 +1,125 @@
 import { X } from "lucide-react";
-import React from "react";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSelectedChat } from "../../redux/chat/chatSlice";
 
 function ChatHeader({
-  fullname ,
+  fullname,
   profilePicture,
-  online ,
+  online,
 }) {
-  
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
-    <header className="flex h-20 items-center justify-between border-b border-zinc-800 bg-zinc-950 px-6">
-      <div className="flex items-center gap-4">
+    <header
+      className="
+        flex
+        h-14
+        shrink-0
+        items-center
+        justify-between
+        border-b
+        border-zinc-800
+        bg-zinc-950
+        px-3
+        sm:h-16
+        sm:px-4
+      "
+    >
+      <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
 
         {/* Avatar */}
-        <div className="relative">
-          {profilePicture ? (
+        <div className="relative shrink-0">
+          {profilePicture?.url ? (
             <img
               src={profilePicture.url}
               alt={fullname}
-              className="h-12 w-12 rounded-full object-cover"
+              className="
+                h-9 w-9
+                rounded-full
+                object-cover
+                sm:h-10 sm:w-10
+              "
             />
           ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 text-lg font-semibold text-white">
+            <div
+              className="
+                flex
+                h-9 w-9
+                items-center
+                justify-center
+                rounded-full
+                bg-violet-600
+                text-sm
+                font-semibold
+                text-white
+                sm:h-10 sm:w-10
+                sm:text-base
+              "
+            >
               {fullname
-                .split(" ")
+                ?.split(" ")
                 .map((word) => word[0])
                 .join("")
                 .slice(0, 2)}
             </div>
           )}
 
+          {/* Online Indicator */}
           {online && (
-            <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-zinc-950 bg-emerald-500"></span>
+            <span
+              className="
+                absolute
+                bottom-0
+                right-0
+                h-2.5 w-2.5
+                rounded-full
+                border-2
+                border-zinc-950
+                bg-emerald-500
+                sm:h-3 sm:w-3
+              "
+            />
           )}
         </div>
 
         {/* User Info */}
-        <div>
-          <h2 className="text-lg font-semibold text-white">
+        <div className="min-w-0">
+          <h2 className="truncate text-sm font-semibold text-white sm:text-base">
             {fullname}
           </h2>
 
           <p
-            className={`text-sm ${
+            className={`text-xs sm:text-sm ${
               online ? "text-emerald-400" : "text-zinc-500"
             }`}
           >
             {online ? "Online" : "Offline"}
           </p>
         </div>
+      </div>
 
-      </div>
-      <div>
-        <X onClick={() => dispatch(setSelectedChat(null))} className="bg-zinc-800 p-2 rounded-2xl hover:bg-red-500 hover:text-white w-9 h-9 text-slate-400"/>
-      </div>
+      {/* Close Button */}
+      <button
+        type="button"
+        onClick={() => dispatch(setSelectedChat(null))}
+        className="
+          ml-2
+          flex
+          h-8 w-8
+          shrink-0
+          items-center
+          justify-center
+          rounded-full
+          text-slate-400
+          transition
+          hover:bg-red-500
+          hover:text-white
+          sm:h-9 sm:w-9
+        "
+      >
+        <X className="h-4 w-4 sm:h-5 sm:w-5" />
+      </button>
+
     </header>
   );
 }

@@ -1,23 +1,37 @@
-function ChatCard({
-  chat,
-  online,
-  onClick
-}) {
+function ChatCard({ chat, online, onClick }) {
   return (
-    <div onClick = {onClick} className="group flex cursor-pointer items-center gap-3 rounded-2xl p-3 transition-all duration-300 border border-zinc-800
-        bg-zinc-900/60  hover:border-violet-500/50
-        hover:bg-zinc-800">
-      <div className="relative">
-      {chat?.profilePicture ? (
+    <div
+      onClick={onClick}
+      className="
+        group
+        flex
+        cursor-pointer
+        items-center
+        gap-2
+        rounded-full
+        border
+        border-zinc-800
+        bg-zinc-900/60
+        p-2
+        transition-all
+        duration-300
+        hover:border-violet-500/50
+        hover:bg-zinc-800
+        
+      "
+    >
+      {/* Profile Picture */}
+      <div className="relative shrink-0">
+        {chat?.profilePicture?.url ? (
           <img
             src={chat.profilePicture.url}
             alt={chat.fullname}
-            className="h-12 w-12 rounded-full object-cover"
+            className="h-9 w-9 rounded-full object-cover sm:h-10 sm:w-10"
           />
         ) : (
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 font-semibold text-white">
-            {chat.fullname
-              .split(" ")
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white sm:h-10 sm:w-10">
+            {chat?.fullname
+              ?.split(" ")
               .map((word) => word[0])
               .join("")
               .slice(0, 2)}
@@ -25,28 +39,30 @@ function ChatCard({
         )}
 
         {online && (
-          <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-zinc-900 bg-emerald-500"></span>
+          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-zinc-900 bg-emerald-500 sm:h-3 sm:w-3" />
         )}
       </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between">
-          <h3 className="truncate font-semibold text-white">
+      {/* Chat Info */}
+      <div className="min-w-0 mr-4 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="truncate text-sm font-semibold text-white sm:text-[15px]">
             {chat.fullname}
           </h3>
 
-          <span className="text-xs text-zinc-500">
-           {online ? "Online" : "Offline"}
+          <span className="shrink-0 text-[10px] text-zinc-500 sm:text-xs">
+            {online ? "Online" : "Offline"}
           </span>
         </div>
 
-        <div className="mt-1 flex items-center justify-between">
-          <p className="truncate text-sm text-zinc-400">
-            {chat.lastMessage || (chat.lastImages?.length ? "📷 Photo" : "")}
+        <div className="mt-0.5 flex items-center justify-between gap-2">
+          <p className="truncate text-xs text-zinc-400 sm:text-sm">
+            {chat.lastMessage ||
+              (chat.lastImages?.length ? "📷 Photo" : "")}
           </p>
 
           {chat.unreadCount > 0 && (
-            <span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-600 px-1.5 text-xs text-white">
+            <span className="flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] text-white sm:h-5 sm:min-w-5 sm:text-xs">
               {chat.unreadCount}
             </span>
           )}

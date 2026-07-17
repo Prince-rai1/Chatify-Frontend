@@ -33,7 +33,6 @@ function MessageInput() {
 
   const onEmojiClick = (emojiData) => {
     setMessage((prev) => prev + emojiData.emoji);
-
   };
 
   const toggleEmojiPicker = () => {
@@ -88,7 +87,7 @@ function MessageInput() {
       dispatch(addMessage(optimisticUi));
 
       formData.append("message", currentMessage);
-      
+
       currentImages.forEach((file) => {
         formData.append("images", file);
       });
@@ -118,7 +117,7 @@ function MessageInput() {
   };
 
   return (
-    <div className="relative border-t border-zinc-800 bg-zinc-950 p-4">
+    <div className="relative p-2 sm:p-4">
       {/* Image Previews */}
       {images.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-2">
@@ -142,7 +141,7 @@ function MessageInput() {
         </div>
       )}
 
-      <div className="flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 px-4 py-3">
+      <div className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1 sm:gap-3 sm:rounded-full sm:px-4 sm:py-1">
         <button
           type="button"
           onClick={toggleEmojiPicker}
@@ -193,7 +192,7 @@ function MessageInput() {
           type="button"
           disabled={!message.trim() && images.length === 0}
           onClick={sendMessage}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-9 w-9 shrink-0 items-center rounded-full justify-center bg-violet-600 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50 sm:h-11 sm:w-11"
         >
           <SendHorizontal size={20} />
         </button>
@@ -205,15 +204,16 @@ function MessageInput() {
           className="
             mt-3 h-80 w-full
             sm:absolute sm:bottom-full sm:left-4 sm:mt-0 sm:mb-2 sm:h-105 sm:w-87.5
-          "
+              "
         >
           <EmojiPicker
             theme="dark"
             lazyLoadEmojis
-            searchDisabled={false}
+            searchDisabled={true}
             skinTonesDisabled={false}
+            autoFocusSearch={false}
+            previewConfig={{ showPreview: false }}
             onEmojiClick={onEmojiClick}
-            emojiSize={32}
             width="100%"
             height="100%"
           />

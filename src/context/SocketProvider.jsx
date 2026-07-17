@@ -15,11 +15,11 @@ const SocketContext = createContext(null);
 export const useSocket = () => useContext(SocketContext);
 
 function SocketProvider({ children }) {
+
   const { isLoggedIn, user } = useSelector((state) => state.auth);
   const { selectedChat, chats } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
-
   const selectedChatRef = useRef(null);
   const chatsRef = useRef([]);
 

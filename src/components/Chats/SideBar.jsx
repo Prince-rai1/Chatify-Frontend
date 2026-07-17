@@ -53,7 +53,7 @@ function Sidebar() {
   return (
     <aside className="flex h-dvh w-full flex-col border-r border-zinc-800 bg-zinc-950">
       {/* Header */}
-      <div className="border-b border-zinc-800 p-5 h-20 bg-violet-600">
+      <div className="border-b border-zinc-800 p-3 h-15 bg-violet-600">
         <h2 className="text-2xl font-bold text-white text-center md:text-left">Chatify</h2>
       </div>
 
@@ -94,7 +94,7 @@ function Sidebar() {
       </div>
 
       <Link to="/chatify/dash-board">
-      <div className="mt-auto border-t border-zinc-800 p-3 ">
+      <div className="mt-auto border-zinc-800 p-3 ">
         <ProfileCard user={user} />
       </div>
       </Link>

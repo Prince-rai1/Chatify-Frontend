@@ -3,11 +3,7 @@ import ChatHeader from "../Chats/ChatHeader";
 import MessageInput from "../Chats/MessageInput";
 import MessageList from "../Chats/MessageList";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  resetUnreadCount,
-  setLoadingMessages,
-  setMessages,
-} from "../../redux/chat/chatSlice";
+import { setLoadingMessages, setMessages } from "../../redux/chat/chatSlice";
 import axios from "../../services/axios";
 import { toast } from "react-hot-toast";
 import MessageSkeleton from "../Skeletons/MessageSkeleton";
@@ -54,7 +50,7 @@ function ChatLayout() {
   }, [selectedChat, dispatch]);
 
   return (
-    <div className="flex  h-dvh flex-1 overflow-hidden  flex-col bg-zinc-950">
+    <div className="flex h-dvh flex-1 overflow-hidden  flex-col bg-zinc-950">
       <ChatHeader
         {...selectedChat}
         online={onlineUsers.includes(selectedChat?._id)}
@@ -66,8 +62,9 @@ function ChatLayout() {
           <MessageList messages={messages} />
         )}
       </div>
-
-      <MessageInput />
+      <div className="">
+        <MessageInput />
+      </div>
     </div>
   );
 }
