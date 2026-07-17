@@ -12,7 +12,7 @@ function ContactCard({ contact, online, onClick }) {
         border
         border-zinc-800
         bg-zinc-900/60
-        p-2
+        p-2.5
         transition-all
         duration-300
         hover:border-violet-500/50
@@ -25,10 +25,10 @@ function ContactCard({ contact, online, onClick }) {
           <img
             src={contact.profilePicture.url}
             alt={contact.fullname}
-            className="h-9 w-9 rounded-full object-cover sm:h-10 sm:w-10"
+            className="h-11 w-11 rounded-full object-cover"
           />
         ) : (
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white sm:h-10 sm:w-10">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white ">
             {contact?.fullname
               ?.split(" ")
               .map((word) => word[0])
@@ -44,12 +44,12 @@ function ContactCard({ contact, online, onClick }) {
 
       {/* Contact Info */}
       <div className="min-w-0">
-        <h3 className="truncate text-sm font-semibold text-white sm:text-[15px]">
+        <h3 className="truncate text-[15px] font-semibold text-white">
           {contact.fullname}
         </h3>
 
         <p
-          className={`text-xs sm:text-sm ${
+          className={`text-xs ${
             online ? "text-emerald-400" : "text-zinc-500"
           }`}
         >

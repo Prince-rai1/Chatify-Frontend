@@ -13,16 +13,14 @@ function ChatHeader({
     <header
       className="
         flex
-        h-14
+        h-16
         shrink-0
         items-center
         justify-between
         border-b
         border-zinc-800
         bg-zinc-950
-        px-3
-        sm:h-16
-        sm:px-4
+        px-4
       "
     >
       <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
@@ -34,26 +32,23 @@ function ChatHeader({
               src={profilePicture.url}
               alt={fullname}
               className="
-                h-9 w-9
+                h-11 w-11
                 rounded-full
                 object-cover
-                sm:h-10 sm:w-10
               "
             />
           ) : (
             <div
               className="
                 flex
-                h-9 w-9
+                h-11 w-11
                 items-center
                 justify-center
                 rounded-full
                 bg-violet-600
-                text-sm
                 font-semibold
                 text-white
-                sm:h-10 sm:w-10
-                sm:text-base
+                text-base
               "
             >
               {fullname
@@ -84,7 +79,7 @@ function ChatHeader({
 
         {/* User Info */}
         <div className="min-w-0">
-          <h2 className="truncate text-sm font-semibold text-white sm:text-base">
+          <h2 className="truncate text-base font-semibold text-white ">
             {fullname}
           </h2>
 
