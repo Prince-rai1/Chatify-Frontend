@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { login, logout } from "./redux/auth/authSlice.js";
 import { Loader, LoaderCircle } from "lucide-react";
+import ThreeBackground from "./components/Common/ThreeBackground.jsx";
 
 function App() {
   const { isCheckingAuth } = useSelector((state) => state.auth);
@@ -29,18 +30,10 @@ function App() {
   if (isCheckingAuth) {
     return (
       <div className="h-screen w-screen overflow-hidden flex justify-center items-center bg-zinc-950 relative">
-        {/* Top-Left Violet Glow (Thoda bada aur zyada visible) */}
-        <div className="absolute -top-32 -left-32 h-100 w-100 rounded-full bg-violet-600/40 blur-[120px]" />
-
-        {/* Bottom-Right Fuchsia Glow (Pinkish effect) */}
-        <div className="absolute -bottom-32 -right-32 h-100 w-100 rounded-full bg-fuchsia-600/30 blur-[120px]" />
-
-        {/* Bottom-Center Blue Glow (Optional - for premium depth) */}
-        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 h-75 w-75 rounded-full bg-blue-600/20 blur-[120px]" />
-
+        <ThreeBackground />
         {/* Center Loader */}
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="animate-spin text-violet-500">
+          <div className="animate-spin text-theme-500">
             <Loader className="w-12 h-12" />
           </div>
           {/* Optional: Chhota sa loading text jo acha dikhta hai */}
@@ -52,9 +45,12 @@ function App() {
     );
   }
   return (
-    <div className="h-dvh overflow-hidden">
+    <div className="h-dvh overflow-hidden relative">
+      <ThreeBackground />
       <Toaster />
-      <Outlet />
+      <div className="relative z-10 h-full">
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function ContactCard({ contact, online, onClick }) {
         p-2.5
         transition-all
         duration-300
-        hover:border-violet-500/50
+        hover:border-theme-500\/50
         hover:bg-zinc-800
       "
     >
@@ -28,7 +28,7 @@ function ContactCard({ contact, online, onClick }) {
             className="h-11 w-11 rounded-full object-cover"
           />
         ) : (
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-sm font-semibold text-white ">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-theme-600 text-sm font-semibold text-white ">
             {contact?.fullname
               ?.split(" ")
               .map((word) => word[0])

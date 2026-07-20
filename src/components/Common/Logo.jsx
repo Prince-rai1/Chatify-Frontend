@@ -5,7 +5,7 @@ function Logo() {
   return (
     <div className="mb-2 flex flex-col items-center justify-center">
       {/* Logo */}
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-violet-600/30">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-theme-gradient shadow-lg shadow-theme-600\/30">
         <MessageCircleMore className="h-8 w-8 text-white" />
       </div>
 

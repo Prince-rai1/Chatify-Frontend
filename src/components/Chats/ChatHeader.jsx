@@ -17,9 +17,7 @@ function ChatHeader({
         shrink-0
         items-center
         justify-between
-        border-b
-        border-zinc-800
-        bg-zinc-950
+        glass-header
         px-4
       "
     >
@@ -45,7 +43,7 @@ function ChatHeader({
                 items-center
                 justify-center
                 rounded-full
-                bg-violet-600
+                bg-theme-600
                 font-semibold
                 text-white
                 text-base

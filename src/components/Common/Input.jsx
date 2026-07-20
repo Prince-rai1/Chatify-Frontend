@@ -36,7 +36,7 @@ function Input({
           ${
             error
               ? "border-red-500"
-              : "border-zinc-700 hover:border-violet-500 focus-within:border-violet-500"
+              : "border-zinc-700 hover:border-theme-500\/50 focus-within:border-theme-500"
           }
           bg-zinc-950/80
             backdrop-blur-md
@@ -48,12 +48,12 @@ function Input({
           ${
             error
               ? "focus-within:ring-red-500/20"
-              : "focus-within:ring-violet-500/20"
+              : "focus-within:ring-theme-500\/20"
           }
         `}
       >
         {Icon && (
-          <Icon className="mr-3 h-5 w-5 text-zinc-500 transition-colors duration-300 group-focus-within:text-violet-400" />
+          <Icon className="mr-3 h-5 w-5 text-zinc-500 transition-colors duration-300 group-focus-within:text-theme-400" />
         )}
 
         <input

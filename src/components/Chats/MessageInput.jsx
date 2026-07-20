@@ -141,14 +141,14 @@ function MessageInput() {
         </div>
       )}
 
-      <div className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1 sm:gap-3 sm:rounded-full sm:px-4 sm:py-1">
+      <div className="flex items-center gap-2 rounded-full border border-white/5 glass-input px-3 py-1 sm:gap-3 sm:rounded-full sm:px-4 sm:py-1">
         <button
           type="button"
           onClick={toggleEmojiPicker}
           className={`shrink-0 ${
             showEmojiPicker
-              ? "text-violet-400"
-              : "text-zinc-400 hover:text-violet-400"
+              ? "text-theme-400"
+              : "text-zinc-400 hover:text-theme-400"
           }`}
         >
           <Smile size={22} />
@@ -157,7 +157,7 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current.click()}
-          className="shrink-0 text-zinc-400 hover:text-violet-400"
+          className="shrink-0 text-zinc-400 hover:text-theme-400"
         >
           <Paperclip size={22} />
         </button>
@@ -192,7 +192,7 @@ function MessageInput() {
           type="button"
           disabled={!message.trim() && images.length === 0}
           onClick={sendMessage}
-          className="flex h-9 w-9 shrink-0 items-center rounded-full justify-center bg-violet-600 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50 sm:h-11 sm:w-11"
+          className="flex h-9 w-9 shrink-0 items-center rounded-full justify-center bg-theme-600 text-white transition hover:bg-theme-500 disabled:cursor-not-allowed disabled:opacity-50 sm:h-11 sm:w-11"
         >
           <SendHorizontal size={20} />
         </button>

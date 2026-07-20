@@ -46,10 +46,10 @@ function ProfilePicture({ user, onSave }) {
           <img
             src={typeof preview === "string" ? preview : preview?.url}
             alt={user.fullName}
-            className="h-36 w-36 rounded-full object-cover ring-4 ring-violet-500/20"
+            className="h-36 w-36 rounded-full object-cover ring-4 ring-theme-500\/20"
           />
         ) : (
-          <div className="flex h-36 w-36 items-center justify-center rounded-full bg-violet-600 text-4xl font-bold text-white">
+          <div className="flex h-36 w-36 items-center justify-center rounded-full bg-theme-600 text-4xl font-bold text-white">
             {initials}
           </div>
         )}
@@ -66,11 +66,11 @@ function ProfilePicture({ user, onSave }) {
             items-center
             justify-center
             rounded-full
-            bg-violet-600
+            bg-theme-600
             text-white
             shadow-lg
             transition
-            hover:bg-violet-500
+            hover:bg-theme-500
           "
         >
           <Camera size={18} />
@@ -91,7 +91,7 @@ function ProfilePicture({ user, onSave }) {
         <div className="mt-6 flex gap-3">
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-white hover:bg-violet-500"
+            className="flex items-center gap-2 rounded-xl bg-theme-600 px-4 py-2 text-white hover:bg-theme-500"
           >
             <Check size={18} />
             Save

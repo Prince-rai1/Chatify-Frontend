@@ -57,7 +57,7 @@ function EditableField({
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-violet-400 transition hover:bg-violet-500/10"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-theme-400 transition hover:bg-theme-500\/10"
             >
               <Pencil size={16} />
               Edit
@@ -72,7 +72,7 @@ function EditableField({
           <input
             type={type}
             {...register(fieldname)}
-            className="rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-violet-500"
+            className="rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-theme-500"
           />
 
           {errors[fieldname] && (
@@ -84,7 +84,7 @@ function EditableField({
           <div className="flex gap-2">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-white transition hover:bg-violet-500"
+              className="flex items-center gap-2 rounded-xl bg-theme-600 px-4 py-3 text-white transition hover:bg-theme-500"
             >
               <Check size={18} />
               Save

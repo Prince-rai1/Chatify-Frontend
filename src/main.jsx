@@ -16,6 +16,7 @@ import PublicRoute from "./pages/Routes/PublicRoute.jsx";
 import ProtectedRoute from "./pages/Routes/ProtectedRoute.jsx";
 import DashBoard from "./pages/DashBoard/DashBoard.jsx";
 import SocketProvider from "./context/SocketProvider.jsx";
+import ThemeProvider from "./context/ThemeProvider.jsx";
 
 const router = createBrowserRouter([
    {
@@ -79,9 +80,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+      <ThemeProvider>
       <SocketProvider>
       <RouterProvider router={router} />
       </SocketProvider>
+      </ThemeProvider>
     </Provider>
   </StrictMode>,
 );

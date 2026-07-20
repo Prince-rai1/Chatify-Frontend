@@ -2,9 +2,9 @@ import React from "react";
 
 function AuthLayout({ children }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-10">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950/70 backdrop-blur-3xl px-4 py-10">
       {/* Soft Glow */}
-      <div className="absolute -top-32 -left-32 h-100 w-100 rounded-full bg-violet-600/40 blur-[120px]" />
+      <div className="absolute -top-32 -left-32 h-100 w-100 rounded-full bg-theme-600\/40 blur-[120px]" />
 
       {/* Bottom-Right Fuchsia Glow (Pinkish effect) */}
       <div className="absolute -bottom-32 -right-32 h-100 w-100 rounded-full bg-fuchsia-600/30 blur-[120px]" />

@@ -8,11 +8,12 @@ function Chat() {
   const {selectedChat} = useSelector((state) => state.chat)
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-zinc-950" >
+    <div className="flex h-dvh overflow-hidden bg-transparent" >
 
       {/* Sidebar */}
       <div
         className={`
+          relative z-50
           w-full
           md:w-80
           ${selectedChat ? "hidden md:block" : "block"}
@@ -24,6 +25,7 @@ function Chat() {
       {/* Chat */}
       <div
         className={`
+          relative z-10
           flex-1
           w-full
           ${selectedChat ? "block" : "hidden md:block"}

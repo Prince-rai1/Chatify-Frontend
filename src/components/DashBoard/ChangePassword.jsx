@@ -44,8 +44,8 @@ function ChangePassword({ onSave }) {
         className="flex w-full items-center justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-violet-600/20 p-2">
-            <Lock className="text-violet-400" size={20} />
+          <div className="rounded-lg bg-theme-600\/20 p-2">
+            <Lock className="text-theme-400" size={20} />
           </div>
 
           <div className="text-left">
@@ -84,7 +84,7 @@ function ChangePassword({ onSave }) {
               type="password"
               placeholder="Enter current password"
               {...register("oldPassword")}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-theme-500"
             />
 
             {errors.oldPassword && (
@@ -105,7 +105,7 @@ function ChangePassword({ onSave }) {
               type="password"
               placeholder="Enter new password"
               {...register("newPassword")}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-theme-500"
             />
 
             {errors.newPassword && (
@@ -126,7 +126,7 @@ function ChangePassword({ onSave }) {
               type="password"
               placeholder="Confirm new password"
               {...register("confirmPassword")}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-violet-500"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none transition focus:border-theme-500"
             />
 
             {errors.confirmPassword && (
@@ -150,7 +150,7 @@ function ChangePassword({ onSave }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-xl bg-violet-600 px-5 py-3 text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-xl bg-theme-600 px-5 py-3 text-white transition hover:bg-theme-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? "Updating..." : "Update Password"}
             </button>

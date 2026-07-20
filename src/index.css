@@ -1,8 +1,317 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* ─── Theme CSS Custom Properties ─── */
+:root {
+  --theme-50: #f5f3ff;
+  --theme-100: #ede9fe;
+  --theme-200: #ddd6fe;
+  --theme-300: #c4b5fd;
+  --theme-400: #a78bfa;
+  --theme-500: #8b5cf6;
+  --theme-600: #7c3aed;
+  --theme-700: #6d28d9;
+  --theme-800: #5b21b6;
+  --theme-900: #4c1d95;
+  --theme-950: #2e1065;
+}
+
 html, body, #root {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* ─── Global Smooth Theme Transition ─── */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, box-shadow, color, fill, stroke, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0ms; /* default: no transition */
+}
+
+/* Opt-in: elements with theme-aware classes get smooth transitions */
+.theme-transition,
+.bg-theme-600,
+.bg-theme-500,
+.bg-theme-400,
+.bg-theme-200,
+.text-theme-600,
+.text-theme-500,
+.text-theme-400,
+.text-theme-200,
+.border-theme-500,
+.border-theme-600 {
+  transition-duration: 400ms;
+}
+
+/* ─── Theme Background Utilities ─── */
+.bg-theme-50 { background-color: var(--theme-50); }
+.bg-theme-100 { background-color: var(--theme-100); }
+.bg-theme-200 { background-color: var(--theme-200); }
+.bg-theme-300 { background-color: var(--theme-300); }
+.bg-theme-400 { background-color: var(--theme-400); }
+.bg-theme-500 { background-color: var(--theme-500); }
+.bg-theme-600 { background-color: var(--theme-600); }
+.bg-theme-700 { background-color: var(--theme-700); }
+.bg-theme-800 { background-color: var(--theme-800); }
+.bg-theme-900 { background-color: var(--theme-900); }
+.bg-theme-950 { background-color: var(--theme-950); }
+
+/* Background with opacity */
+.bg-theme-600\/20 { background-color: color-mix(in srgb, var(--theme-600) 20%, transparent); }
+.bg-theme-600\/40 { background-color: color-mix(in srgb, var(--theme-600) 40%, transparent); }
+.bg-theme-500\/10 { background-color: color-mix(in srgb, var(--theme-500) 10%, transparent); }
+.bg-theme-500\/20 { background-color: color-mix(in srgb, var(--theme-500) 20%, transparent); }
+
+/* ─── Theme Text Utilities ─── */
+.text-theme-50 { color: var(--theme-50); }
+.text-theme-100 { color: var(--theme-100); }
+.text-theme-200 { color: var(--theme-200); }
+.text-theme-300 { color: var(--theme-300); }
+.text-theme-400 { color: var(--theme-400); }
+.text-theme-500 { color: var(--theme-500); }
+.text-theme-600 { color: var(--theme-600); }
+.text-theme-700 { color: var(--theme-700); }
+
+/* ─── Theme Border Utilities ─── */
+.border-theme-500 { border-color: var(--theme-500); }
+.border-theme-600 { border-color: var(--theme-600); }
+.border-theme-500\/50 { border-color: color-mix(in srgb, var(--theme-500) 50%, transparent); }
+.border-theme-500\/30 { border-color: color-mix(in srgb, var(--theme-500) 30%, transparent); }
+
+/* ─── Theme Ring Utilities ─── */
+.ring-theme-500\/20 {
+  --tw-ring-color: color-mix(in srgb, var(--theme-500) 20%, transparent);
+}
+
+/* ─── Theme Shadow Utilities ─── */
+.shadow-theme-500\/30 {
+  --tw-shadow-color: color-mix(in srgb, var(--theme-500) 30%, transparent);
+  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-theme-600\/30 {
+  --tw-shadow-color: color-mix(in srgb, var(--theme-600) 30%, transparent);
+  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* ─── Hover Variants ─── */
+.hover\:bg-theme-500:hover { background-color: var(--theme-500); }
+.hover\:bg-theme-600:hover { background-color: var(--theme-600); }
+.hover\:text-theme-400:hover { color: var(--theme-400); }
+.hover\:border-theme-500\/50:hover { border-color: color-mix(in srgb, var(--theme-500) 50%, transparent); }
+.hover\:bg-theme-500\/10:hover { background-color: color-mix(in srgb, var(--theme-500) 10%, transparent); }
+.hover\:shadow-theme-500\/30:hover {
+  --tw-shadow-color: color-mix(in srgb, var(--theme-500) 30%, transparent);
+  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* ─── Focus-within Variants ─── */
+.focus-within\:border-theme-500:focus-within { border-color: var(--theme-500); }
+.focus-within\:ring-theme-500\/20:focus-within {
+  --tw-ring-color: color-mix(in srgb, var(--theme-500) 20%, transparent);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), 0 0 0 4px var(--tw-ring-color), var(--tw-shadow, 0 0 #0000);
+}
+
+/* Focus variant */
+.focus\:border-theme-500:focus { border-color: var(--theme-500); }
+
+/* ─── Group Hover Variants ─── */
+.group-hover\:text-theme-400 { /* base: nothing */ }
+.group:hover .group-hover\:text-theme-400 { color: var(--theme-400); }
+
+/* ─── Group Focus-within Variants ─── */
+.group-focus-within\:text-theme-400 { /* base: nothing */ }
+.group:focus-within .group-focus-within\:text-theme-400 { color: var(--theme-400); }
+
+/* ─── Gradient Utilities ─── */
+.from-theme-600 {
+  --tw-gradient-from: var(--theme-600);
+  --tw-gradient-to: transparent;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+/* ─── Theme Selector Styles ─── */
+.theme-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (min-width: 768px) {
+  .theme-backdrop {
+    display: none;
+  }
+}
+
+.theme-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 80vh;
+  z-index: 1000;
+  padding: 24px 20px;
+  border-radius: 24px 24px 0 0;
+  background: rgba(24, 24, 27, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  animation: theme-panel-slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes theme-panel-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .theme-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    right: auto;
+    width: 220px;
+    max-height: none;
+    padding: 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    animation: theme-panel-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes theme-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.theme-swatch-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 12px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-swatch-btn:hover {
+  transform: scale(1.1);
+}
+
+.theme-swatch-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-swatch {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.theme-swatch-active {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.2) inset,
+    0 0 16px rgba(255, 255, 255, 0.1);
+}
+
+.theme-swatch-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.theme-swatch-btn:hover .theme-swatch-glow {
+  opacity: 1;
+}
+
+/* ─── Logo Gradient Override ─── */
+.bg-theme-gradient {
+  background: linear-gradient(to bottom right, var(--theme-600), var(--theme-400));
+}
+
+/* ─── Three.js Canvas ─── */
+.three-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ─── Glassmorphism Surfaces ─── */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-surface-heavy {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-bubble {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }

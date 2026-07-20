@@ -85,9 +85,9 @@ function ProfileDashboard({ user }) {
   }
 
   return (
-    <div className="flex h-full flex-col  bg-zinc-950">
+    <div className="flex h-full flex-col glass-surface-heavy border-l border-white/5">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-zinc-800 px-8 py-5 bg-violet-600">
+      <div className="flex items-center justify-between border-b border-zinc-800 px-8 py-5 bg-theme-600">
         <div>
           <h1 className="text-3xl font-bold text-white">My Profile</h1>
 

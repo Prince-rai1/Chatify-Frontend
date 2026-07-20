@@ -18,8 +18,8 @@ function MessageBubble({
           rounded-2xl px-4 py-3 shadow-md
           ${
             isSender
-              ? "rounded-br-md bg-violet-600 text-white"
-              : "rounded-bl-md bg-zinc-800 text-zinc-100"
+              ? "rounded-br-md bg-theme-600 text-white"
+              : "rounded-bl-md glass-bubble text-zinc-100"
           }
         `}
       >
@@ -68,7 +68,7 @@ function MessageBubble({
         <div
           className={`mt-2 flex items-center gap-1 text-[11px] ${
             isSender
-              ? "justify-end text-violet-200"
+              ? "justify-end text-theme-200"
               : "justify-end text-zinc-400"
           }`}
         >

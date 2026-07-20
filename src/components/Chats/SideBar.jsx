@@ -8,6 +8,7 @@ import { resetUnreadCount, setChats, setContacts, setLoadingChats, setSelectedCh
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
+import ThemeSelector from "../Common/ThemeSelector";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState("chats");
@@ -51,20 +52,21 @@ function Sidebar() {
   }, [dispatch]);
 
   return (
-    <aside className="flex h-dvh w-full flex-col border-r border-zinc-800 bg-zinc-950">
+    <aside className="flex h-dvh w-full flex-col border-r border-white/5 glass-surface-heavy">
       {/* Header */}
-      <div className="border-b border-zinc-800 p-3 h-15 bg-violet-600">
+      <div className="border-b border-white/5 p-3 h-15 bg-theme-600 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-white text-center md:text-left">Chatify</h2>
+        <ThemeSelector />
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-zinc-800">
+      <div className="flex border-b border-white/5">
         <button
           onClick={() => setActiveTab("chats")}
           className={`flex-1 py-4 text-sm font-medium transition
             ${
               activeTab === "chats"
-                ? "border-b-2 border-violet-500 text-violet-400"
+                ? "border-b-2 border-theme-500 text-theme-400"
                 : "text-zinc-500 hover:text-white"
             }`}
         >
@@ -76,7 +78,7 @@ function Sidebar() {
           className={`flex-1 py-4 text-sm font-medium transition
             ${
               activeTab === "contacts"
-                ? "border-b-2 border-violet-500 text-violet-400"
+                ? "border-b-2 border-theme-500 text-theme-400"
                 : "text-zinc-500 hover:text-white"
             }`}
         >

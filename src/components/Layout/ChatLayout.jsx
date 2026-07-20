@@ -50,7 +50,7 @@ function ChatLayout() {
   }, [selectedChat, dispatch]);
 
   return (
-    <div className="flex h-dvh flex-1 overflow-hidden  flex-col bg-zinc-950">
+    <div className="flex h-dvh flex-1 overflow-hidden flex-col glass-surface">
       <ChatHeader
         {...selectedChat}
         online={onlineUsers.includes(selectedChat?._id)}

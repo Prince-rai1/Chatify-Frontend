@@ -17,7 +17,7 @@ function ProfileCard({ user }) {
         sm:p-2
         transition-all
         duration-300
-        hover:border-violet-500/50
+        hover:border-theme-500\/50
         hover:bg-zinc-800
       "
     >
@@ -44,7 +44,7 @@ function ProfileCard({ user }) {
                 items-center
                 justify-center
                 rounded-full
-                bg-violet-600
+                bg-theme-600
                 text-sm
                 font-semibold
                 text-white
@@ -98,7 +98,7 @@ function ProfileCard({ user }) {
           transition-all
           duration-300
           group-hover:translate-x-1
-          group-hover:text-violet-400
+          group-hover:text-theme-400
         "
       />
     </div>
