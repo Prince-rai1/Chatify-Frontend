@@ -47,7 +47,7 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
         {/* Bubble */}
         <div
           className={`
-            rounded-2xl px-4 py-3 shadow-md flex flex-col
+            rounded-2xl px-4 py-3 shadow-md flex flex-col min-w-0
             ${isUser
               ? "rounded-br-md bg-theme-600 text-white"
               : "rounded-bl-md glass-bubble text-zinc-100"
@@ -58,7 +58,7 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
           {renderAttachment()}
 
           {/* Message Content */}
-          <p className="wrap-break-word text-sm leading-7 whitespace-pre-wrap">
+          <p className="break-words text-sm leading-7 whitespace-pre-wrap overflow-hidden w-full">
             {content}
             {isStreaming && (
               <span className="ai-typing-cursor" />

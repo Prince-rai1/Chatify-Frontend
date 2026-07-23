@@ -6,6 +6,7 @@ const PLAYBACK_SAMPLE_RATE = 24000;
 const BAR_COUNT = 32;
 
 // ─── Inline AudioWorklet processor (created as Blob URL) ───
+// ─── Inline AudioWorklet processor (With Noise Gate) ───
 const workletCode = `
 class PCMCaptureProcessor extends AudioWorkletProcessor {
   constructor() {
@@ -22,10 +23,31 @@ class PCMCaptureProcessor extends AudioWorkletProcessor {
 
     const float32 = input[0];
     const pcm16 = new Int16Array(float32.length);
+    
+    // 1. Aawaz ka volume check karo (RMS calculation)
+    let sumSquares = 0;
     for (let i = 0; i < float32.length; i++) {
-      const s = Math.max(-1, Math.min(1, float32[i]));
+        sumSquares += float32[i] * float32[i];
+    }
+    const volume = Math.sqrt(sumSquares / float32.length);
+
+    // 2. NOISE GATE THRESHOLD (0.005)
+    // Agar volume is number se kam hai, toh hum usko background noise manenge
+    const isSpeaking = volume > 0.005; 
+
+    for (let i = 0; i < float32.length; i++) {
+      let s = float32[i];
+      
+      // Agar user nahi bol raha hai (sirf noise hai), toh usko 0 (silence) kar do
+      if (!isSpeaking) {
+          s = 0; 
+      }
+
+      // Format ko PCM-16 mein convert karo jo Gemini samajhta hai
+      s = Math.max(-1, Math.min(1, s));
       pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
     }
+    
     this.port.postMessage(pcm16.buffer, [pcm16.buffer]);
     return true;
   }
@@ -196,11 +218,11 @@ function AIVoiceCallModal({ character, onClose }) {
 
     // Close audio contexts
     if (audioContextRef.current && audioContextRef.current.state !== "closed") {
-      audioContextRef.current.close().catch(() => {});
+      audioContextRef.current.close().catch(() => { });
       audioContextRef.current = null;
     }
     if (playbackContextRef.current && playbackContextRef.current.state !== "closed") {
-      playbackContextRef.current.close().catch(() => {});
+      playbackContextRef.current.close().catch(() => { });
       playbackContextRef.current = null;
     }
 
@@ -213,20 +235,27 @@ function AIVoiceCallModal({ character, onClose }) {
     setCallState("connecting");
 
     try {
-      // 1. Get microphone access
+      // 1. Get microphone access (Mobile friendly constraints - removed strict sampleRate/channelCount)
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          sampleRate: SAMPLE_RATE,
-          channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
+          autoGainControl: true, // Mobile ke liye bohot zaroori hai
         },
       });
       mediaStreamRef.current = stream;
 
+      // Cross-browser AudioContext for Safari & Chrome Mobile
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
       // 2. Setup audio capture context + AudioWorklet
-      const audioCtx = new AudioContext({ sampleRate: SAMPLE_RATE });
+      const audioCtx = new AudioContextClass({ sampleRate: SAMPLE_RATE });
       audioContextRef.current = audioCtx;
+
+      // Safari Fix: Explicitly resume the context on mobile
+      if (audioCtx.state === "suspended") {
+        await audioCtx.resume();
+      }
 
       // Register the worklet processor
       await audioCtx.audioWorklet.addModule(workletUrl);
@@ -241,7 +270,7 @@ function AIVoiceCallModal({ character, onClose }) {
       analyserRef.current = analyser;
       setAnalyserNode(analyser);
 
-      // AudioWorkletNode (replaces deprecated ScriptProcessorNode)
+      // AudioWorkletNode 
       const workletNode = new AudioWorkletNode(audioCtx, "pcm-capture-processor");
       workletNodeRef.current = workletNode;
 
@@ -251,9 +280,14 @@ function AIVoiceCallModal({ character, onClose }) {
       workletNode.connect(audioCtx.destination);
 
       // 3. Setup playback context (Gemini outputs 24kHz audio)
-      const playbackCtx = new AudioContext({ sampleRate: PLAYBACK_SAMPLE_RATE });
+      const playbackCtx = new AudioContextClass({ sampleRate: PLAYBACK_SAMPLE_RATE });
       playbackContextRef.current = playbackCtx;
       nextPlayTimeRef.current = playbackCtx.currentTime;
+
+      // Safari Fix: Explicitly resume playback context
+      if (playbackCtx.state === "suspended") {
+        await playbackCtx.resume();
+      }
 
       // 4. Connect WebSocket
       const wsUrl = buildWsUrl(import.meta.env.VITE_SOCKET_URL, character._id);
@@ -324,10 +358,13 @@ function AIVoiceCallModal({ character, onClose }) {
       };
     } catch (err) {
       console.error("Call setup error:", err);
+      // Enhanced error messages for debugging on mobile
       if (err.name === "NotAllowedError") {
-        setError("Microphone access denied. Please allow microphone access.");
+        setError("Microphone access denied. Please allow microphone access in your browser settings.");
+      } else if (err.name === "OverconstrainedError") {
+        setError("Your device microphone doesn't support the required audio format.");
       } else {
-        setError("Failed to start call. Please try again.");
+        setError("Failed to start call: " + err.message);
       }
       setCallState("idle");
       cleanup();
@@ -359,7 +396,7 @@ function AIVoiceCallModal({ character, onClose }) {
   }, [isMuted]);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -386,15 +423,15 @@ function AIVoiceCallModal({ character, onClose }) {
             {callState === "active" && (
               <>
                 <div
-                  className="absolute inset-[-12px] rounded-full ai-call-pulse"
+                  className="absolute -inset-3 rounded-full ai-call-pulse"
                   style={{ borderColor: `${character.color}40` }}
                 />
                 <div
-                  className="absolute inset-[-24px] rounded-full ai-call-pulse"
+                  className="absolute -inset-6 rounded-full ai-call-pulse"
                   style={{ borderColor: `${character.color}20`, animationDelay: "0.5s" }}
                 />
                 <div
-                  className="absolute inset-[-36px] rounded-full ai-call-pulse"
+                  className="absolute -inset-9 rounded-full ai-call-pulse"
                   style={{ borderColor: `${character.color}10`, animationDelay: "1s" }}
                 />
               </>
@@ -403,7 +440,7 @@ function AIVoiceCallModal({ character, onClose }) {
             {/* Connecting spinner */}
             {callState === "connecting" && (
               <div
-                className="absolute inset-[-8px] rounded-full border-2 border-t-transparent animate-spin"
+                className="absolute -inset-2 rounded-full border-2 border-t-transparent animate-spin"
                 style={{ borderColor: `${character.color}60`, borderTopColor: "transparent" }}
               />
             )}
@@ -469,11 +506,10 @@ function AIVoiceCallModal({ character, onClose }) {
             {callState === "active" && (
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className={`flex h-14 w-14 items-center justify-center rounded-full transition-all duration-200 ${
-                  isMuted
-                    ? "bg-red-500/20 text-red-400"
-                    : "bg-white/10 text-white hover:bg-white/20"
-                }`}
+                className={`flex h-14 w-14 items-center justify-center rounded-full transition-all duration-200 ${isMuted
+                  ? "bg-red-500/20 text-red-400"
+                  : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
               >
                 {isMuted ? <MicOff size={22} /> : <Mic size={22} />}
               </button>
@@ -483,11 +519,10 @@ function AIVoiceCallModal({ character, onClose }) {
             {callState === "idle" || callState === "ended" ? (
               <button
                 onClick={callState === "ended" ? onClose : startCall}
-                className={`flex h-16 w-16 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg ${
-                  callState === "ended"
-                    ? "bg-zinc-600 hover:bg-zinc-500"
-                    : "bg-emerald-500 hover:bg-emerald-400"
-                }`}
+                className={`flex h-16 w-16 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg ${callState === "ended"
+                  ? "bg-zinc-600 hover:bg-zinc-500"
+                  : "bg-emerald-500 hover:bg-emerald-400"
+                  }`}
                 style={
                   callState !== "ended"
                     ? { boxShadow: `0 0 30px ${character.color}40` }
