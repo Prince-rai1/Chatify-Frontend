@@ -7,11 +7,17 @@ const BAR_COUNT = 32;
 
 // ─── Inline AudioWorklet processor (created as Blob URL) ───
 // ─── Inline AudioWorklet processor (With Noise Gate) ───
+// ─── Inline AudioWorklet processor (With Auto-Converter & Noise Gate) ───
 const workletCode = `
 class PCMCaptureProcessor extends AudioWorkletProcessor {
-  constructor() {
+  constructor(options) {
     super();
     this._muted = false;
+    // Phone jo aawaz bhej raha hai uski speed
+    this.inRate = options.processorOptions?.sampleRate || 16000;
+    // Gemini ko jo speed chahiye
+    this.outRate = 16000; 
+    
     this.port.onmessage = (e) => {
       if (e.data.type === 'mute') this._muted = e.data.value;
     };
@@ -22,28 +28,28 @@ class PCMCaptureProcessor extends AudioWorkletProcessor {
     if (!input || !input[0] || this._muted) return true;
 
     const float32 = input[0];
-    const pcm16 = new Int16Array(float32.length);
     
-    // 1. Aawaz ka volume check karo (RMS calculation)
+    // Automatic Converter (Agar phone 48000 bhej raha hai, toh usko 16000 mein badlega)
+    const ratio = Math.max(1, Math.round(this.inRate / this.outRate)); 
+    const outLength = Math.floor(float32.length / ratio);
+    const pcm16 = new Int16Array(outLength);
+    
+    // Noise Gate Logic (Background noise hatane ke liye)
     let sumSquares = 0;
     for (let i = 0; i < float32.length; i++) {
         sumSquares += float32[i] * float32[i];
     }
     const volume = Math.sqrt(sumSquares / float32.length);
+    const isSpeaking = volume > 0.005;
 
-    // 2. NOISE GATE THRESHOLD (0.005)
-    // Agar volume is number se kam hai, toh hum usko background noise manenge
-    const isSpeaking = volume > 0.005; 
-
-    for (let i = 0; i < float32.length; i++) {
-      let s = float32[i];
+    for (let i = 0; i < outLength; i++) {
+      let s = float32[i * ratio]; // Sahi aawaz nikalna
       
-      // Agar user nahi bol raha hai (sirf noise hai), toh usko 0 (silence) kar do
       if (!isSpeaking) {
           s = 0; 
       }
 
-      // Format ko PCM-16 mein convert karo jo Gemini samajhta hai
+      // Gemini ke format (PCM-16) mein badalna
       s = Math.max(-1, Math.min(1, s));
       pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
     }
@@ -246,7 +252,7 @@ function AIVoiceCallModal({ character, onClose }) {
       mediaStreamRef.current = stream;
 
       // Cross-browser AudioContext for Safari & Chrome Mobile
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const AudioContextClass = window.AudioContext || window["webkitAudioContext"];
 
       // 2. Setup audio capture context + AudioWorklet
       const audioCtx = new AudioContextClass({ sampleRate: SAMPLE_RATE });
@@ -271,7 +277,11 @@ function AIVoiceCallModal({ character, onClose }) {
       setAnalyserNode(analyser);
 
       // AudioWorkletNode 
-      const workletNode = new AudioWorkletNode(audioCtx, "pcm-capture-processor");
+      const workletNode = new AudioWorkletNode(audioCtx, "pcm-capture-processor", {
+        processorOptions: {
+          sampleRate: audioCtx.sampleRate // Phone ki asli speed worklet ko batana
+        }
+      });
       workletNodeRef.current = workletNode;
 
       // Wire: source → analyser → workletNode
