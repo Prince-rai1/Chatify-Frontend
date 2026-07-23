@@ -1,8 +1,8 @@
-function ContactCard({ contact, online, onClick }) {
+function ContactCard({ contact, online, isSelected, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="
+      className={`
         group
         flex
         cursor-pointer
@@ -10,14 +10,23 @@ function ContactCard({ contact, online, onClick }) {
         gap-2
         rounded-full
         border
-        border-zinc-800
-        bg-zinc-900/60
         p-2.5
         transition-all
         duration-300
-        hover:border-theme-500\/50
-        hover:bg-zinc-800
-      "
+        ${
+          isSelected
+            ? "border-theme-500 bg-theme-500/15 text-white scale-[1.01]"
+            : "border-zinc-800/80 bg-zinc-900/60 hover:border-theme-500/50 hover:bg-zinc-800/80"
+        }
+      `}
+      style={
+        isSelected
+          ? {
+              boxShadow:
+                "0 0 18px color-mix(in srgb, var(--theme-500) 40%, transparent), 0 0 32px color-mix(in srgb, var(--theme-500) 15%, transparent)",
+            }
+          : {}
+      }
     >
       {/* Profile Picture */}
       <div className="relative shrink-0">

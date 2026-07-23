@@ -5,15 +5,17 @@ import ProfileCard from "./ProfileCard";
 import axios from "../../services/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUnreadCount, setChats, setContacts, setLoadingChats, setSelectedChat } from "../../redux/chat/chatSlice";
+import { setSelectedCharacter } from "../../redux/ai/aiSlice";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
 import ThemeSelector from "../Common/ThemeSelector";
+import AICharacterRow from "../AI/AICharacterRow";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState("chats");
   const dispatch = useDispatch();
-  const { contacts, chats, isLoadingChats} = useSelector((state) => state.chat);
+  const { contacts, chats, isLoadingChats, selectedChat } = useSelector((state) => state.chat);
   const { user, onlineUsers } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -51,6 +53,17 @@ function Sidebar() {
    
   }, [dispatch]);
 
+  const handleChatSelect = (chat) => {
+    dispatch(setSelectedCharacter(null));
+    dispatch(setSelectedChat(chat));
+    dispatch(resetUnreadCount(chat._id));
+  };
+
+  const handleContactSelect = (contact) => {
+    dispatch(setSelectedCharacter(null));
+    dispatch(setSelectedChat(contact));
+  };
+
   return (
     <aside className="flex h-dvh w-full flex-col border-r border-white/5 glass-surface-heavy">
       {/* Header */}
@@ -58,6 +71,9 @@ function Sidebar() {
         <h2 className="text-2xl font-bold text-white text-center md:text-left">Chatify</h2>
         <ThemeSelector />
       </div>
+
+      {/* AI Characters Row */}
+      <AICharacterRow />
 
       {/* Tabs */}
       <div className="flex border-b border-white/5">
@@ -88,11 +104,29 @@ function Sidebar() {
 
       {/* List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
-      {  isLoadingChats?(<SidebarSkeleton/>):activeTab === "chats"
-          ? chats.map((chat) => <ChatCard key={chat._id} chat={chat} onClick={()=>{dispatch(setSelectedChat(chat)); dispatch(resetUnreadCount(chat._id))}} online = {onlineUsers.includes(chat?._id)}/>)
-          : contacts.map((contact) => (
-              <ContactCard key={contact._id} contact={contact} onClick = {() => dispatch(setSelectedChat(contact))} online = {onlineUsers.includes(contact?._id)}/>
-            ))}
+        {isLoadingChats ? (
+          <SidebarSkeleton />
+        ) : activeTab === "chats" ? (
+          chats.map((chat) => (
+            <ChatCard
+              key={chat._id}
+              chat={chat}
+              isSelected={selectedChat?._id === chat._id}
+              onClick={() => handleChatSelect(chat)}
+              online={onlineUsers.includes(chat?._id)}
+            />
+          ))
+        ) : (
+          contacts.map((contact) => (
+            <ContactCard
+              key={contact._id}
+              contact={contact}
+              isSelected={selectedChat?._id === contact._id}
+              onClick={() => handleContactSelect(contact)}
+              online={onlineUsers.includes(contact?._id)}
+            />
+          ))
+        )}
       </div>
 
       <Link to="/chatify/dash-board">
