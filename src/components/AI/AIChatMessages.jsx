@@ -110,6 +110,9 @@ function AIChatMessages() {
           role={msg.role}
           characterName={selectedCharacter?.name}
           characterColor={selectedCharacter?.color}
+          fileName={msg.fileName}
+          fileType={msg.fileType}
+          fileUrl={msg.fileUrl}
         />
       ))}
 
