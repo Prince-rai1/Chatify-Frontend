@@ -111,7 +111,7 @@ function AICharacterRow() {
 
                 {/* Theme Color Indicator Dot */}
                 <span
-                  className="absolute -bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-zinc-950"
+                  className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-zinc-950"
                   style={{ backgroundColor: character.color }}
                 />
               </div>

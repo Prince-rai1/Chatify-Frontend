@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addAiMessage,
   setStreaming,
-  appendStreamChunk,
   clearStreamingText,
+  updateAiMessage,
 } from "../../redux/ai/aiSlice";
 import axios from "../../services/axios";
 import { toast } from "react-hot-toast";
@@ -76,15 +76,17 @@ function AIChatInput() {
     }
 
     // Add user message optimistically
+    const tempMessageId = `temp-${Date.now()}`;
     dispatch(
       addAiMessage({
-        _id: `temp-${Date.now()}`,
+        _id: tempMessageId,
         role: "user",
         content: currentMessage,
         createdAt: new Date().toISOString(),
         fileName,
         fileType,
         fileUrl: filePreviewUrl, 
+        isLoading: !!fileToSend,
       })
     );
 
@@ -101,6 +103,9 @@ function AIChatInput() {
         fileType,
       });
 
+      if (fileToSend) {
+        dispatch(updateAiMessage({ _id: tempMessageId, isLoading: false }));
+      }
       // Response is streamed via socket — ai:end handler will finalize
     } catch (error) {
       console.error("AI chat error:", error);
@@ -120,7 +125,7 @@ function AIChatInput() {
           ) : (
             <File size={18} className="text-theme-400" />
           )}
-          <span className="text-sm font-medium text-zinc-200 max-w-[200px] truncate">
+          <span className="text-sm font-medium text-zinc-200 max-w-50 truncate">
             {selectedFile.name}
           </span>
           <button 

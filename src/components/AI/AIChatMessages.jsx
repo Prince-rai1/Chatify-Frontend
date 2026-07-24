@@ -113,6 +113,7 @@ function AIChatMessages() {
           fileName={msg.fileName}
           fileType={msg.fileType}
           fileUrl={msg.fileUrl}
+          isLoading={msg.isLoading}
         />
       ))}
 

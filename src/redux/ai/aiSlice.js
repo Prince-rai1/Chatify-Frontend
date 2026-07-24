@@ -55,6 +55,14 @@ const aiSlice = createSlice({
       state.streamingText = "";
       state.isStreaming = false;
     },
+
+    updateAiMessage: (state, action) => {
+      const { _id, ...changes } = action.payload;
+      const index = state.aiMessages.findIndex((msg) => msg._id === _id);
+      if (index !== -1) {
+        state.aiMessages[index] = { ...state.aiMessages[index], ...changes };
+      }
+    },
   },
 });
 
@@ -69,6 +77,7 @@ export const {
   appendStreamChunk,
   clearStreamingText,
   clearAiChat,
+  updateAiMessage,
 } = aiSlice.actions;
 
 export default aiSlice.reducer;
