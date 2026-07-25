@@ -22,6 +22,30 @@ html, body, #root {
   overscroll-behavior: none;
 }
 
+/* ─── Custom Slim Theme Scrollbar ─── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-500) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--theme-500);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--theme-600);
+}
+
 /* ─── Global Smooth Theme Transition ─── */
 *,
 *::before,
