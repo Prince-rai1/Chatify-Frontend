@@ -1,4 +1,5 @@
 import { Bot, File, Image as ImageIcon, Loader } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 
 function AIChatBubble({ content, role, characterName, characterColor, isStreaming = false, fileName, fileType, fileUrl, isLoading }) {
   const isUser = role === "user";
@@ -31,12 +32,12 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
           )}
         </div>
         <div className="flex flex-col min-w-0">
-           <span className="text-sm font-medium text-zinc-200 truncate max-w-45">
-             {fileName}
-           </span>
-           <span className="text-[10px] text-zinc-400 uppercase">
-             {isLoading ? "UPLOADING..." : (fileType?.split('/')?.pop() || 'FILE')}
-           </span>
+          <span className="text-sm font-medium text-zinc-200 truncate max-w-45">
+            {fileName}
+          </span>
+          <span className="text-[10px] text-zinc-400 uppercase">
+            {isLoading ? "UPLOADING..." : (fileType?.split('/')?.pop() || 'FILE')}
+          </span>
         </div>
       </div>
     );
@@ -69,12 +70,15 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
           {renderAttachment()}
 
           {/* Message Content */}
-          <p className="wrap-break-word text-sm leading-7 whitespace-pre-wrap overflow-hidden w-full">
-            {content}
+          {/* Message Content */}
+          <div className="wrap-break-word text-sm leading-7 whitespace-pre-wrap overflow-hidden w-full">
+            <ReactMarkdown>
+              {content}
+            </ReactMarkdown>
             {isStreaming && (
               <span className="ai-typing-cursor" />
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>
