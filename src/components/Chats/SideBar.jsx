@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
 import ThemeSelector from "../Common/ThemeSelector";
 import AICharacterRow from "../AI/AICharacterRow";
+import { MessageCircleMore } from "lucide-react";
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState("chats");
@@ -68,7 +69,14 @@ function Sidebar() {
     <aside className="flex h-dvh w-full flex-col border-r border-white/5 glass-surface-heavy">
       {/* Header */}
       <div className="border-b border-white/5 p-3 h-15 bg-theme-600 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white text-center md:text-left">Chatify</h2>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-theme-gradient shadow-lg shadow-theme-600/30">
+            <MessageCircleMore className="h-4 w-4 text-white" />
+          </div>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-white via-white to-zinc-400 bg-clip-text text-transparent tracking-tight">
+            Chatify
+          </h2>
+        </div>
         <ThemeSelector />
       </div>
 

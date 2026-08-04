@@ -25,8 +25,6 @@ function App() {
     checkAuth();
   }, []);
 
-  console.log();
-
   if (isCheckingAuth) {
     return (
       <div className="h-screen w-screen overflow-hidden flex justify-center items-center bg-zinc-950 relative">

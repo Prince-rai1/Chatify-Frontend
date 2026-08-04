@@ -17,11 +17,12 @@ import ProtectedRoute from "./pages/Routes/ProtectedRoute.jsx";
 import DashBoard from "./pages/DashBoard/DashBoard.jsx";
 import SocketProvider from "./context/SocketProvider.jsx";
 import ThemeProvider from "./context/ThemeProvider.jsx";
+import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 
 const router = createBrowserRouter([
-   {
+  {
     path: "/",
-    element: <Navigate to="/chatify" replace />,
+    element: <LandingPage />,
   },
   {
     path: "/chatify",
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
 
       // Public Routes
       {
-        element: <PublicRoute/>,
+        element: <PublicRoute />,
         children: [
           {
             path: "sign-up",
@@ -61,15 +62,15 @@ const router = createBrowserRouter([
 
       // Protected Routes
       {
-        element: <ProtectedRoute/>,
+        element: <ProtectedRoute />,
         children: [
           {
-            index : true,
-            element: <Chat/>,
+            index: true,
+            element: <Chat />,
           },
           {
-            path : "dash-board",
-            element : <DashBoard/>
+            path: "dash-board",
+            element: <DashBoard />
           }
         ],
       },
@@ -81,9 +82,9 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <ThemeProvider>
-      <SocketProvider>
-      <RouterProvider router={router} />
-      </SocketProvider>
+        <SocketProvider>
+          <RouterProvider router={router} />
+        </SocketProvider>
       </ThemeProvider>
     </Provider>
   </StrictMode>,

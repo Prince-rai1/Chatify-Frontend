@@ -13,7 +13,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/auth/authSlice.js";
+import { login, logout } from "../../redux/auth/authSlice.js";
 
 function SignIn() {
   const {
@@ -47,6 +47,8 @@ function SignIn() {
       console.log(error.response?.data?.message);
 
       toast.error(error.response?.data?.message);
+
+      dispatch(logout())
 
       if (error.response?.data?.message === "Please verify your email first.") {
 
