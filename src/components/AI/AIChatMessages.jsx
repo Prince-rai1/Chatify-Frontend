@@ -13,7 +13,6 @@ function AIChatMessages() {
   const bottomRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Fetch history when character changes
   useEffect(() => {
     if (!selectedCharacter) return;
 
@@ -32,7 +31,6 @@ function AIChatMessages() {
     fetchHistory();
   }, [selectedCharacter?._id, dispatch]);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [aiMessages, streamingText]);
@@ -52,10 +50,8 @@ function AIChatMessages() {
 
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto p-4 sm:p-6">
-      {/* Greeting if no messages */}
       {!hasMessages && selectedCharacter && (
         <div className="flex flex-col items-center justify-center h-full text-center px-4">
-          {/* AI Avatar */}
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-5 ai-avatar-glow"
             style={{
@@ -74,7 +70,6 @@ function AIChatMessages() {
             )}
           </div>
 
-          {/* Greeting */}
           <h3 className="text-xl font-semibold text-white mb-2">
             {selectedCharacter.name}
           </h3>
@@ -82,7 +77,6 @@ function AIChatMessages() {
             {selectedCharacter.greeting || selectedCharacter.description}
           </p>
 
-          {/* Expertise Tags */}
           {selectedCharacter.expertise?.length > 0 && (
             <div className="flex flex-wrap justify-center gap-2 mt-4 max-w-md">
               {selectedCharacter.expertise.slice(0, 6).map((tag) => (
@@ -102,7 +96,6 @@ function AIChatMessages() {
         </div>
       )}
 
-      {/* Messages */}
       {aiMessages.map((msg) => (
         <AIChatBubble
           key={msg._id}
@@ -117,7 +110,6 @@ function AIChatMessages() {
         />
       ))}
 
-      {/* Streaming bubble */}
       {isStreaming && streamingText && (
         <AIChatBubble
           content={streamingText}
@@ -128,7 +120,6 @@ function AIChatMessages() {
         />
       )}
 
-      {/* Streaming indicator when waiting for first chunk */}
       {isStreaming && !streamingText && (
         <div className="mb-4 flex justify-start">
           <div className="flex gap-2">

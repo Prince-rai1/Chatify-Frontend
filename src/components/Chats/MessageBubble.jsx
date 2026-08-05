@@ -23,7 +23,6 @@ function MessageBubble({
           }
         `}
       >
-        {/* Images */}
         {images.length > 0 && (
           <div
             className={
@@ -59,12 +58,10 @@ function MessageBubble({
             ))}
           </div>
         )}
-        {/* Message */}
         {message && (
           <p className="wrap-break-word text-sm leading-6">{message}</p>
         )}
 
-        {/* Time + Status */}
         <div
           className={`mt-2 flex items-center gap-1 text-[11px] ${
             isSender

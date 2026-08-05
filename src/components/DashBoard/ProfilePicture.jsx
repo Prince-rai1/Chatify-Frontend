@@ -39,7 +39,6 @@ function ProfilePicture({ user, onSave }) {
 
   return (
     <div className="flex flex-col items-center rounded-2xl border border-zinc-800 bg-zinc-900/60 p-8">
-      {/* Avatar */}
 
       <div className="group relative">
         {preview ? (
@@ -85,7 +84,6 @@ function ProfilePicture({ user, onSave }) {
         />
       </div>
 
-      {/* Buttons */}
 
       {selectedFile && (
         <div className="mt-6 flex gap-3">

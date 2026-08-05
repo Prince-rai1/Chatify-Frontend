@@ -50,14 +50,12 @@ function VerifyOtp() {
   return (
     <AuthLayout>
       <AuthCard>
-        {/* Shield Icon */}
         <div className="mb-6 flex justify-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600/20 ring-1 ring-violet-500/30">
             <ShieldCheck className="h-8 w-8 text-violet-400" />
           </div>
         </div>
 
-        {/* Heading */}
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-white">Verify Code</h2>
 

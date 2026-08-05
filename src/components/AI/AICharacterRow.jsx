@@ -58,7 +58,6 @@ function AICharacterRow() {
   return (
     <div className="w-full pt-2 border-b border-white/5">
 
-      {/* Section Label */}
       <div className="flex items-center gap-1.5 mb-2 px-3">
         <Bot size={13} className="text-theme-400" />
         <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
@@ -66,7 +65,6 @@ function AICharacterRow() {
         </span>
       </div>
 
-      {/* Horizontal Scroll Row (Scrollbar abhi bhi patla rahega) */}
       <div className="flex gap-3 overflow-x-auto flex-nowrap w-full px-3 pb-3 touch-pan-x snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full">
         {characters.map((character) => {
           const isSelected = selectedCharacter?._id === character._id;
@@ -76,7 +74,6 @@ function AICharacterRow() {
               onClick={() => handleSelect(character)}
               className="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer snap-center"
             >
-              {/* Avatar Circle: Size w-12 h-12 (Perfect middle size) */}
               <div className="relative">
                 <div
                   className={`
@@ -109,14 +106,12 @@ function AICharacterRow() {
                   )}
                 </div>
 
-                {/* Theme Color Indicator Dot */}
                 <span
                   className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-zinc-950"
                   style={{ backgroundColor: character.color }}
                 />
               </div>
 
-              {/* Name */}
               <span
                 className={`text-[11px] font-medium transition-colors duration-200 ${isSelected ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"
                   }`}

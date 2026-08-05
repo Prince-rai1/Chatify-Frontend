@@ -8,7 +8,6 @@ function ThemeSelector() {
   const buttonRef = useRef(null);
   const { theme: activeTheme, setTheme, themes } = useTheme();
 
-  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -16,7 +15,7 @@ function ThemeSelector() {
         !panelRef.current.contains(e.target) &&
         buttonRef.current &&
         !buttonRef.current.contains(e.target) &&
-        !e.target.closest('.theme-backdrop') // Prevent closing twice if backdrop clicked
+        !e.target.closest('.theme-backdrop')
       ) {
         setIsOpen(false);
       }
@@ -32,7 +31,6 @@ function ThemeSelector() {
 
   return (
     <div className="relative">
-      {/* Toggle Button */}
       <button
         ref={buttonRef}
         type="button"
@@ -50,10 +48,8 @@ function ThemeSelector() {
         <Palette size={20} />
       </button>
 
-      {/* Theme Panel & Backdrop */}
       {isOpen && (
         <>
-          {/* Mobile Backdrop (Hidden on md screens via CSS) */}
           <div 
             className="theme-backdrop" 
             onClick={() => setIsOpen(false)}
@@ -63,12 +59,10 @@ function ThemeSelector() {
             ref={panelRef}
             className="theme-panel"
           >
-            {/* Mobile Drag Handle */}
             <div className="w-full flex justify-center mb-4 md:hidden">
               <div className="w-12 h-1.5 bg-zinc-600 rounded-full" />
             </div>
 
-            {/* Panel Header */}
             <div className="flex items-center justify-between mb-4 md:mb-4">
               <h3 className="text-lg md:text-sm font-semibold text-white tracking-wide">
                 Choose Theme
@@ -82,7 +76,6 @@ function ThemeSelector() {
               </button>
             </div>
 
-            {/* Color Swatches Container (Scrollable) */}
             <div 
               className="flex-1 overflow-y-auto pb-4 md:pb-0" 
               style={{ scrollbarWidth: "none" }}
@@ -100,7 +93,6 @@ function ThemeSelector() {
                       className="theme-swatch-btn group flex-shrink-0"
                       title={themes[key].label}
                     >
-                      {/* Swatch Circle */}
                       <div
                         className={`
                           theme-swatch
@@ -108,7 +100,6 @@ function ThemeSelector() {
                         `}
                         style={{ backgroundColor: themes[key][500] }}
                       >
-                        {/* Checkmark */}
                         {isActive && (
                           <Check
                             size={16}
@@ -117,7 +108,6 @@ function ThemeSelector() {
                           />
                         )}
 
-                        {/* Hover Glow Ring */}
                         <div
                           className="theme-swatch-glow"
                           style={{
@@ -126,7 +116,6 @@ function ThemeSelector() {
                         />
                       </div>
 
-                      {/* Label */}
                       <span
                         className={`
                           mt-1.5 text-[11px] md:text-[10px] font-medium tracking-wide

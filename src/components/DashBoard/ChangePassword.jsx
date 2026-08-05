@@ -36,7 +36,6 @@ function ChangePassword({ onSave }) {
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
-      {/* Header */}
 
       <button
         type="button"
@@ -66,14 +65,12 @@ function ChangePassword({ onSave }) {
         )}
       </button>
 
-      {/* Form */}
 
       {open && (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-6 space-y-4"
         >
-          {/* Current Password */}
 
           <div>
             <label className="mb-2 block text-sm text-zinc-400">
@@ -94,7 +91,6 @@ function ChangePassword({ onSave }) {
             )}
           </div>
 
-          {/* New Password */}
 
           <div>
             <label className="mb-2 block text-sm text-zinc-400">
@@ -115,7 +111,6 @@ function ChangePassword({ onSave }) {
             )}
           </div>
 
-          {/* Confirm Password */}
 
           <div>
             <label className="mb-2 block text-sm text-zinc-400">
@@ -136,7 +131,6 @@ function ChangePassword({ onSave }) {
             )}
           </div>
 
-          {/* Buttons */}
 
           <div className="flex justify-end gap-3">
             <button

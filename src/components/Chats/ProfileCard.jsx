@@ -23,7 +23,6 @@ function ProfileCard({ user }) {
     >
       <div className="flex min-w-0 items-center gap-2 sm:gap-3">
 
-        {/* Avatar */}
         <div className="relative shrink-0">
           {user?.profilePicture?.url ? (
             <img
@@ -60,7 +59,6 @@ function ProfileCard({ user }) {
             </div>
           )}
 
-          {/* Online Indicator */}
           <span
             className="
               absolute
@@ -76,7 +74,6 @@ function ProfileCard({ user }) {
           />
         </div>
 
-        {/* User Info */}
         <div className="min-w-0">
           <h3 className="truncate text-sm font-medium text-white ">
             {user?.fullname}
@@ -88,7 +85,6 @@ function ProfileCard({ user }) {
         </div>
       </div>
 
-      {/* Arrow */}
       <ChevronRight
         className="
           h-4 w-4

@@ -29,7 +29,6 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
 
-      // Public Routes
       {
         element: <PublicRoute />,
         children: [
@@ -60,7 +59,6 @@ const router = createBrowserRouter([
         ],
       },
 
-      // Protected Routes
       {
         element: <ProtectedRoute />,
         children: [

@@ -28,7 +28,6 @@ function ContactCard({ contact, online, isSelected, onClick }) {
           : {}
       }
     >
-      {/* Profile Picture */}
       <div className="relative shrink-0">
         {contact?.profilePicture?.url ? (
           <img
@@ -51,7 +50,6 @@ function ContactCard({ contact, online, isSelected, onClick }) {
         )}
       </div>
 
-      {/* Contact Info */}
       <div className="min-w-0">
         <h3 className="truncate text-[15px] font-semibold text-white">
           {contact.fullname}

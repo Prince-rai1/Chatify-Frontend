@@ -23,7 +23,6 @@ function ChatHeader({
     >
       <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
 
-        {/* Avatar */}
         <div className="relative shrink-0">
           {profilePicture?.url ? (
             <img
@@ -57,7 +56,6 @@ function ChatHeader({
             </div>
           )}
 
-          {/* Online Indicator */}
           {online && (
             <span
               className="
@@ -75,7 +73,6 @@ function ChatHeader({
           )}
         </div>
 
-        {/* User Info */}
         <div className="min-w-0">
           <h2 className="truncate text-base font-semibold text-white ">
             {fullname}
@@ -91,7 +88,6 @@ function ChatHeader({
         </div>
       </div>
 
-      {/* Close Button */}
       <button
         type="button"
         onClick={() => dispatch(setSelectedChat(null))}

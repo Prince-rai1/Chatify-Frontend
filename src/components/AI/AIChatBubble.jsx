@@ -46,7 +46,6 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
   return (
     <div className={`mb-4 flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className="flex gap-2 max-w-[85%] sm:max-w-[75%] md:max-w-[65%]">
-        {/* AI Avatar */}
         {!isUser && (
           <div
             className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold mt-1 shadow-sm"
@@ -56,7 +55,6 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
           </div>
         )}
 
-        {/* Bubble */}
         <div
           className={`
             rounded-2xl px-4 py-3 shadow-md flex flex-col min-w-0
@@ -66,11 +64,8 @@ function AIChatBubble({ content, role, characterName, characterColor, isStreamin
             }
           `}
         >
-          {/* File Attachment */}
           {renderAttachment()}
 
-          {/* Message Content */}
-          {/* Message Content */}
           <div className="wrap-break-word text-sm leading-7 whitespace-pre-wrap overflow-hidden w-full">
             <ReactMarkdown>
               {content}

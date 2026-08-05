@@ -86,7 +86,6 @@ function ProfileDashboard({ user }) {
 
   return (
     <div className="flex h-full flex-col glass-surface-heavy border-l border-white/5">
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-zinc-800 px-8 py-5 bg-theme-600">
         <div>
           <h1 className="text-3xl font-bold text-white">My Profile</h1>
@@ -111,15 +110,12 @@ function ProfileDashboard({ user }) {
         </button>
       </div>
 
-      {/* Body */}
       <div className="flex-1 overflow-y-auto p-8">
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Left */}
           <div className="lg:sticky lg:top-8 lg:self-start">
             <ProfilePicture user={user} onSave={onSave} />
           </div>
 
-          {/* Right */}
           <div className="space-y-5 lg:col-span-2">
             <EditableField
               label="Full Name"

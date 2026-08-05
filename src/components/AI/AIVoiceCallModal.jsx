@@ -5,17 +5,12 @@ const SAMPLE_RATE = 16000;
 const PLAYBACK_SAMPLE_RATE = 24000;
 const BAR_COUNT = 32;
 
-// ─── Inline AudioWorklet processor (created as Blob URL) ───
-// ─── Inline AudioWorklet processor (With Noise Gate) ───
-// ─── Inline AudioWorklet processor (With Auto-Converter & Noise Gate) ───
 const workletCode = `
 class PCMCaptureProcessor extends AudioWorkletProcessor {
   constructor(options) {
     super();
     this._muted = false;
-    // Phone jo aawaz bhej raha hai uski speed
     this.inRate = options.processorOptions?.sampleRate || 16000;
-    // Gemini ko jo speed chahiye
     this.outRate = 16000; 
     
     this.port.onmessage = (e) => {
@@ -29,12 +24,10 @@ class PCMCaptureProcessor extends AudioWorkletProcessor {
 
     const float32 = input[0];
     
-    // Automatic Converter (Agar phone 48000 bhej raha hai, toh usko 16000 mein badlega)
     const ratio = Math.max(1, Math.round(this.inRate / this.outRate)); 
     const outLength = Math.floor(float32.length / ratio);
     const pcm16 = new Int16Array(outLength);
     
-    // Noise Gate Logic (Background noise hatane ke liye)
     let sumSquares = 0;
     for (let i = 0; i < float32.length; i++) {
         sumSquares += float32[i] * float32[i];
@@ -43,13 +36,12 @@ class PCMCaptureProcessor extends AudioWorkletProcessor {
     const isSpeaking = volume > 0.005;
 
     for (let i = 0; i < outLength; i++) {
-      let s = float32[i * ratio]; // Sahi aawaz nikalna
+      let s = float32[i * ratio];
       
       if (!isSpeaking) {
           s = 0; 
       }
 
-      // Gemini ke format (PCM-16) mein badalna
       s = Math.max(-1, Math.min(1, s));
       pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
     }
@@ -65,19 +57,13 @@ registerProcessor('pcm-capture-processor', PCMCaptureProcessor);
 const workletBlob = new Blob([workletCode], { type: "application/javascript" });
 const workletUrl = URL.createObjectURL(workletBlob);
 
-// ─── Safe WebSocket URL builder ───
 function buildWsUrl(socketUrl, characterId) {
   let base = (socketUrl || "http://localhost:3000").trim();
-  // Convert http(s) → ws(s)
   base = base.replace(/^https:\/\//i, "wss://").replace(/^http:\/\//i, "ws://");
-  // Strip trailing slashes
   base = base.replace(/\/+$/, "");
   return `${base}/api/ai-call?characterId=${characterId}`;
 }
 
-// ═══════════════════════════════════════════════════
-//  VoiceWaveVisualizer (Canvas-based)
-// ═══════════════════════════════════════════════════
 function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
   const canvasRef = useRef(null);
   const animFrameRef = useRef(null);
@@ -102,7 +88,6 @@ function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Get frequency data if analyser is available
       if (analyserNode && frequencyData) {
         analyserNode.getByteFrequencyData(frequencyData);
       }
@@ -113,7 +98,6 @@ function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
       const centerY = height / 2;
 
       for (let i = 0; i < BAR_COUNT; i++) {
-        // Map frequency bin to bar (log-scale distribution)
         let target = 0;
         if (frequencyData && frequencyData.length > 0) {
           const freqIndex = Math.floor(
@@ -122,7 +106,6 @@ function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
           target = (frequencyData[freqIndex] || 0) / 255;
         }
 
-        // Smooth interpolation
         barsRef.current[i] += (target - barsRef.current[i]) * 0.18;
         const level = barsRef.current[i];
 
@@ -130,7 +113,6 @@ function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
         const x = i * barWidth + gap / 2;
         const w = barWidth - gap;
 
-        // Gradient opacity based on level
         const alpha = 0.3 + level * 0.7;
         ctx.fillStyle =
           color + Math.round(alpha * 255).toString(16).padStart(2, "0");
@@ -158,11 +140,8 @@ function VoiceWaveVisualizer({ analyserNode, color, isActive }) {
   );
 }
 
-// ═══════════════════════════════════════════════════
-//  Main Component
-// ═══════════════════════════════════════════════════
 function AIVoiceCallModal({ character, onClose }) {
-  const [callState, setCallState] = useState("idle"); // idle | connecting | active | ended
+  const [callState, setCallState] = useState("idle");
   const [isMuted, setIsMuted] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
   const [error, setError] = useState(null);
@@ -178,22 +157,18 @@ function AIVoiceCallModal({ character, onClose }) {
   const timerRef = useRef(null);
   const nextPlayTimeRef = useRef(0);
 
-  // Format duration as mm:ss
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
     const secs = (seconds % 60).toString().padStart(2, "0");
     return `${mins}:${secs}`;
   };
 
-  // ─── Cleanup everything ───
   const cleanup = useCallback(() => {
-    // Stop timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
 
-    // Close WebSocket (nullify handlers first to prevent circular calls)
     if (wsRef.current) {
       wsRef.current.onclose = null;
       wsRef.current.onerror = null;
@@ -202,13 +177,11 @@ function AIVoiceCallModal({ character, onClose }) {
       wsRef.current = null;
     }
 
-    // Stop media stream tracks
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
       mediaStreamRef.current = null;
     }
 
-    // Disconnect audio nodes
     if (workletNodeRef.current) {
       workletNodeRef.current.disconnect();
       workletNodeRef.current = null;
@@ -222,7 +195,6 @@ function AIVoiceCallModal({ character, onClose }) {
       sourceRef.current = null;
     }
 
-    // Close audio contexts
     if (audioContextRef.current && audioContextRef.current.state !== "closed") {
       audioContextRef.current.close().catch(() => { });
       audioContextRef.current = null;
@@ -235,71 +207,59 @@ function AIVoiceCallModal({ character, onClose }) {
     setAnalyserNode(null);
   }, []);
 
-  // ─── Start the call ───
   const startCall = async () => {
     setError(null);
     setCallState("connecting");
 
     try {
-      // 1. Get microphone access (Mobile friendly constraints - removed strict sampleRate/channelCount)
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true, // Mobile ke liye bohot zaroori hai
+          autoGainControl: true,
         },
       });
       mediaStreamRef.current = stream;
 
-      // Cross-browser AudioContext for Safari & Chrome Mobile
       const AudioContextClass = window.AudioContext || window["webkitAudioContext"];
 
-      // 2. Setup audio capture context + AudioWorklet
       const audioCtx = new AudioContextClass({ sampleRate: SAMPLE_RATE });
       audioContextRef.current = audioCtx;
 
-      // Safari Fix: Explicitly resume the context on mobile
       if (audioCtx.state === "suspended") {
         await audioCtx.resume();
       }
 
-      // Register the worklet processor
       await audioCtx.audioWorklet.addModule(workletUrl);
 
       const source = audioCtx.createMediaStreamSource(stream);
       sourceRef.current = source;
 
-      // AnalyserNode for visualizer
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 256;
       analyser.smoothingTimeConstant = 0.75;
       analyserRef.current = analyser;
       setAnalyserNode(analyser);
 
-      // AudioWorkletNode 
       const workletNode = new AudioWorkletNode(audioCtx, "pcm-capture-processor", {
         processorOptions: {
-          sampleRate: audioCtx.sampleRate // Phone ki asli speed worklet ko batana
+          sampleRate: audioCtx.sampleRate
         }
       });
       workletNodeRef.current = workletNode;
 
-      // Wire: source → analyser → workletNode
       source.connect(analyser);
       analyser.connect(workletNode);
       workletNode.connect(audioCtx.destination);
 
-      // 3. Setup playback context (Gemini outputs 24kHz audio)
       const playbackCtx = new AudioContextClass({ sampleRate: PLAYBACK_SAMPLE_RATE });
       playbackContextRef.current = playbackCtx;
       nextPlayTimeRef.current = playbackCtx.currentTime;
 
-      // Safari Fix: Explicitly resume playback context
       if (playbackCtx.state === "suspended") {
         await playbackCtx.resume();
       }
 
-      // 4. Connect WebSocket
       const wsUrl = buildWsUrl(import.meta.env.VITE_SOCKET_URL, character._id);
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
@@ -309,25 +269,21 @@ function AIVoiceCallModal({ character, onClose }) {
         setCallState("active");
         setCallDuration(0);
 
-        // Start duration timer
         timerRef.current = setInterval(() => {
           setCallDuration((prev) => prev + 1);
         }, 1000);
       };
 
-      // Worklet sends PCM buffers via port messages
       workletNode.port.onmessage = (e) => {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(e.data);
         }
       };
 
-      // Receive audio from Gemini via server
       ws.onmessage = async (event) => {
         const playbackCtx = playbackContextRef.current;
         if (!playbackCtx) return;
 
-        // Resume suspended context (browser autoplay policy)
         if (playbackCtx.state === "suspended") {
           try {
             await playbackCtx.resume();
@@ -349,7 +305,6 @@ function AIVoiceCallModal({ character, onClose }) {
         bufferSource.buffer = buffer;
         bufferSource.connect(playbackCtx.destination);
 
-        // Schedule playback in sequence to avoid gaps
         const now = playbackCtx.currentTime;
         const startTime = Math.max(now, nextPlayTimeRef.current);
         bufferSource.start(startTime);
@@ -368,7 +323,6 @@ function AIVoiceCallModal({ character, onClose }) {
       };
     } catch (err) {
       console.error("Call setup error:", err);
-      // Enhanced error messages for debugging on mobile
       if (err.name === "NotAllowedError") {
         setError("Microphone access denied. Please allow microphone access in your browser settings.");
       } else if (err.name === "OverconstrainedError") {
@@ -381,25 +335,20 @@ function AIVoiceCallModal({ character, onClose }) {
     }
   };
 
-  // ─── End the call ───
   const endCall = () => {
     setCallState("ended");
     cleanup();
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => cleanup();
   }, [cleanup]);
 
-  // Sync mute state to worklet processor
   useEffect(() => {
-    // Disable the media track (hardware-level mute)
     if (mediaStreamRef.current) {
       const audioTrack = mediaStreamRef.current.getAudioTracks()[0];
       if (audioTrack) audioTrack.enabled = !isMuted;
     }
-    // Tell the worklet to stop sending buffers
     if (workletNodeRef.current) {
       workletNodeRef.current.port.postMessage({ type: "mute", value: isMuted });
     }
@@ -407,15 +356,12 @@ function AIVoiceCallModal({ character, onClose }) {
 
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={callState === "idle" || callState === "ended" ? onClose : undefined}
       />
 
-      {/* Modal */}
       <div className="relative w-full max-w-sm mx-4 rounded-3xl overflow-hidden glass-surface-heavy border border-white/10 ai-call-modal-enter">
-        {/* Close Button */}
         <button
           onClick={() => {
             if (callState === "active" || callState === "connecting") endCall();
@@ -427,9 +373,7 @@ function AIVoiceCallModal({ character, onClose }) {
         </button>
 
         <div className="flex flex-col items-center px-6 pt-10 pb-8">
-          {/* AI Avatar with pulse ring */}
           <div className="relative mb-6">
-            {/* Pulse rings during active call */}
             {callState === "active" && (
               <>
                 <div
@@ -447,7 +391,6 @@ function AIVoiceCallModal({ character, onClose }) {
               </>
             )}
 
-            {/* Connecting spinner */}
             {callState === "connecting" && (
               <div
                 className="absolute -inset-2 rounded-full border-2 border-t-transparent animate-spin"
@@ -477,7 +420,6 @@ function AIVoiceCallModal({ character, onClose }) {
             </div>
           </div>
 
-          {/* Name & Status */}
           <h3 className="text-xl font-bold text-white mb-1">{character.name}</h3>
           <p className="text-sm text-zinc-400 mb-1">
             {callState === "idle" && "Ready to call"}
@@ -486,7 +428,6 @@ function AIVoiceCallModal({ character, onClose }) {
             {callState === "ended" && "Call ended"}
           </p>
 
-          {/* Duration */}
           {(callState === "active" || callState === "ended") && (
             <p className="text-2xl font-mono text-white mb-4 tabular-nums">
               {formatDuration(callDuration)}
@@ -496,7 +437,6 @@ function AIVoiceCallModal({ character, onClose }) {
           {callState === "idle" && <div className="h-6 mb-4" />}
           {callState === "connecting" && <div className="h-6 mb-4" />}
 
-          {/* Voice Wave Visualizer */}
           <div className="w-full mb-5 h-16">
             <VoiceWaveVisualizer
               analyserNode={analyserNode}
@@ -505,14 +445,11 @@ function AIVoiceCallModal({ character, onClose }) {
             />
           </div>
 
-          {/* Error */}
           {error && (
             <p className="text-red-400 text-sm text-center mb-4 px-4">{error}</p>
           )}
 
-          {/* Controls */}
           <div className="flex items-center gap-4">
-            {/* Mute toggle (only during active call) */}
             {callState === "active" && (
               <button
                 onClick={() => setIsMuted(!isMuted)}
@@ -525,7 +462,6 @@ function AIVoiceCallModal({ character, onClose }) {
               </button>
             )}
 
-            {/* Start / End Call */}
             {callState === "idle" || callState === "ended" ? (
               <button
                 onClick={callState === "ended" ? onClose : startCall}
@@ -558,7 +494,6 @@ function AIVoiceCallModal({ character, onClose }) {
             )}
           </div>
 
-          {/* Hint text */}
           {callState === "idle" && (
             <p className="text-zinc-600 text-xs mt-5 text-center">
               Tap to start a live voice conversation

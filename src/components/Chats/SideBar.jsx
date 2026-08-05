@@ -22,7 +22,7 @@ function Sidebar() {
   useEffect(() => {
 
     dispatch(setLoadingChats(true))
-    
+
     const getContactUsers = async () => {
       try {
         const res = await axios.get("/user/contacts");
@@ -31,8 +31,8 @@ function Sidebar() {
       } catch (error) {
         toast.error(error.response?.data?.message);
       }
-      finally{
-         dispatch(setLoadingChats(false))
+      finally {
+        dispatch(setLoadingChats(false))
       }
     };
 
@@ -43,15 +43,15 @@ function Sidebar() {
       } catch (error) {
         toast.error(error.response?.data?.message);
       }
-      finally{
-         dispatch(setLoadingChats(false))
+      finally {
+        dispatch(setLoadingChats(false))
       }
     };
 
     getChatUsers();
     getContactUsers();
 
-   
+
   }, [dispatch]);
 
   const handleChatSelect = (chat) => {
@@ -67,7 +67,7 @@ function Sidebar() {
 
   return (
     <aside className="flex h-dvh w-full flex-col border-r border-white/5 glass-surface-heavy">
-      {/* Header */}
+
       <div className="border-b border-white/5 p-3 h-15 bg-theme-600 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-theme-gradient shadow-lg shadow-theme-600/30">
@@ -80,18 +80,16 @@ function Sidebar() {
         <ThemeSelector />
       </div>
 
-      {/* AI Characters Row */}
+
       <AICharacterRow />
 
-      {/* Tabs */}
       <div className="flex border-b border-white/5">
         <button
           onClick={() => setActiveTab("chats")}
           className={`flex-1 py-4 text-sm font-medium transition
-            ${
-              activeTab === "chats"
-                ? "border-b-2 border-theme-500 text-theme-400"
-                : "text-zinc-500 hover:text-white"
+            ${activeTab === "chats"
+              ? "border-b-2 border-theme-500 text-theme-400"
+              : "text-zinc-500 hover:text-white"
             }`}
         >
           Chats
@@ -100,17 +98,15 @@ function Sidebar() {
         <button
           onClick={() => setActiveTab("contacts")}
           className={`flex-1 py-4 text-sm font-medium transition
-            ${
-              activeTab === "contacts"
-                ? "border-b-2 border-theme-500 text-theme-400"
-                : "text-zinc-500 hover:text-white"
+            ${activeTab === "contacts"
+              ? "border-b-2 border-theme-500 text-theme-400"
+              : "text-zinc-500 hover:text-white"
             }`}
         >
           Contacts
         </button>
       </div>
 
-      {/* List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {isLoadingChats ? (
           <SidebarSkeleton />
@@ -138,9 +134,9 @@ function Sidebar() {
       </div>
 
       <Link to="/chatify/dash-board">
-      <div className="mt-auto border-zinc-800 p-3 ">
-        <ProfileCard user={user} />
-      </div>
+        <div className="mt-auto border-zinc-800 p-3 ">
+          <ProfileCard user={user} />
+        </div>
       </Link>
     </aside>
   );

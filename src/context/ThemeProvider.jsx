@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext();
 
-// Complete HSL-based color scales for each theme
 const THEMES = {
   violet: {
     label: "Violet",
@@ -260,11 +259,9 @@ export function ThemeProvider({ children }) {
     try {
       localStorage.setItem(STORAGE_KEY, themeName);
     } catch {
-      // localStorage unavailable
     }
   };
 
-  // Apply theme on mount and whenever it changes
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);

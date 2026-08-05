@@ -18,7 +18,6 @@ function AIChatLayout() {
     (state) => state.ai
   );
 
-  // Socket.IO listeners for AI streaming
   useEffect(() => {
     if (!socket) return;
 
@@ -27,9 +26,6 @@ function AIChatLayout() {
     };
 
     const handleEnd = () => {
-      // Get current streaming text from store is tricky in event handlers,
-      // so we use a flag-based approach: the streaming text is already in Redux,
-      // we'll add the final message from the accumulated text
       dispatch(setStreaming(false));
     };
 
@@ -42,7 +38,6 @@ function AIChatLayout() {
     };
   }, [socket, dispatch]);
 
-  // When streaming ends, commit the accumulated text as a final message
   useEffect(() => {
     if (!isStreaming && streamingText) {
       dispatch(

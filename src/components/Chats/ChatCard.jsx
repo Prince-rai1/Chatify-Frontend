@@ -28,7 +28,6 @@ function ChatCard({ chat, online, isSelected, onClick }) {
           : {}
       }
     >
-      {/* Profile Picture */}
       <div className="relative shrink-0">
         {chat?.profilePicture?.url ? (
           <img
@@ -51,7 +50,6 @@ function ChatCard({ chat, online, isSelected, onClick }) {
         )}
       </div>
 
-      {/* Chat Info */}
       <div className="min-w-0 mr-4 flex-1">
         <div className="flex items-center justify-between gap-2">
           <h3 className="truncate text-[15px] font-semibold text-white">

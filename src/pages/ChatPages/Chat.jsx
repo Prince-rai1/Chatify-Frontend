@@ -9,13 +9,11 @@ function Chat() {
   const { selectedChat } = useSelector((state) => state.chat)
   const { selectedCharacter } = useSelector((state) => state.ai)
 
-  // Either a human chat or AI character is active
   const hasActivePanel = selectedChat || selectedCharacter;
 
   return (
     <div className="flex h-dvh overflow-hidden bg-transparent" >
 
-      {/* Sidebar */}
       <div
         className={`
           relative z-50
@@ -27,7 +25,6 @@ function Chat() {
         <Sidebar />
       </div>
 
-      {/* Chat / AI Chat */}
       <div
         className={`
           relative z-10

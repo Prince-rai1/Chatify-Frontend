@@ -36,7 +36,6 @@ function AIChatHeader() {
     <>
       <header className="flex h-16 shrink-0 items-center justify-between glass-header px-4">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-          {/* Back Button */}
           <button
             onClick={handleBack}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-zinc-400 transition hover:bg-white/10 hover:text-white md:hidden"
@@ -44,7 +43,6 @@ function AIChatHeader() {
             <ArrowLeft size={18} />
           </button>
 
-          {/* Avatar */}
           <div
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white font-semibold text-base"
             style={{ backgroundColor: selectedCharacter.color }}
@@ -60,7 +58,6 @@ function AIChatHeader() {
             )}
           </div>
 
-          {/* Info */}
           <div className="min-w-0">
             <h2 className="truncate text-base font-semibold text-white">
               {selectedCharacter.name}
@@ -69,9 +66,7 @@ function AIChatHeader() {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-1">
-          {/* Voice Call */}
           <button
             onClick={() => setShowCallModal(true)}
             className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition hover:bg-emerald-500/20 hover:text-emerald-400"
@@ -80,7 +75,6 @@ function AIChatHeader() {
             <Phone size={18} />
           </button>
 
-          {/* Clear Chat */}
           <button
             onClick={handleClearChat}
             disabled={isClearing}
@@ -90,7 +84,6 @@ function AIChatHeader() {
             <Trash2 size={18} />
           </button>
 
-          {/* Close (desktop) */}
           <button
             onClick={handleBack}
             className="hidden md:flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition hover:bg-red-500 hover:text-white"
@@ -101,7 +94,6 @@ function AIChatHeader() {
         </div>
       </header>
 
-      {/* Voice Call Modal */}
       {showCallModal && (
         <AIVoiceCallModal
           character={selectedCharacter}

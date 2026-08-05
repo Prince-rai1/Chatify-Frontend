@@ -118,7 +118,6 @@ function MessageInput() {
 
   return (
     <div className="relative p-2 sm:p-4">
-      {/* Image Previews */}
       {images.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-2">
           {images.map((img, index) => (
@@ -198,7 +197,6 @@ function MessageInput() {
         </button>
       </div>
 
-      {/* Emoji Picker — mobile pe keyboard ki jagah niche dock hoga, desktop pe floating popup */}
       {showEmojiPicker && (
         <div
           className="

@@ -40,7 +40,6 @@ function useCounter(end, duration = 2000, startOnView = true) {
           const animate = (timestamp) => {
             if (!startTime) startTime = timestamp;
             const progress = Math.min((timestamp - startTime) / duration, 1);
-            // easeOutQuart
             const eased = 1 - Math.pow(1 - progress, 4);
             setCount(Math.floor(eased * end));
             if (progress < 1) requestAnimationFrame(animate);
@@ -155,7 +154,6 @@ export default function LandingPage() {
 
   const fullText = "Connect. Chat. Collaborate.";
 
-  /* ── Typewriter effect ── */
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -166,20 +164,17 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  /* Blinking cursor */
   useEffect(() => {
     const blink = setInterval(() => setShowCursor((c) => !c), 530);
     return () => clearInterval(blink);
   }, []);
 
-  /* ── Header background on scroll ── */
   useEffect(() => {
     const onScroll = () => setHeaderSolid(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ── Stagger chat messages ── */
   useEffect(() => {
     const timers = CHAT_MESSAGES.map((_, i) =>
       setTimeout(() => setVisibleMessages((v) => v + 1), 1800 + i * 700)
@@ -189,7 +184,6 @@ export default function LandingPage() {
 
   return (
     <div className="w-full h-full overflow-y-auto overflow-x-hidden landing-scroll">
-      {/* ════════════════ NAVBAR ════════════════ */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerSolid
           ? "glass-header shadow-lg shadow-black/20"
@@ -197,7 +191,6 @@ export default function LandingPage() {
           }`}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          {/* Logo */}
           <Link to="/chatify" className="flex items-center gap-3 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-theme-gradient shadow-lg shadow-theme-600/30 group-hover:scale-110 transition-transform duration-300">
               <MessageCircleMore className="h-5 w-5 text-white" />
@@ -207,7 +200,6 @@ export default function LandingPage() {
             </span>
           </Link>
 
-          {/* Nav Links */}
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-zinc-400 hover:text-white transition-colors duration-200">
               Features
@@ -220,7 +212,6 @@ export default function LandingPage() {
             </a>
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
               <Link
@@ -250,9 +241,7 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      {/* ════════════════ HERO ════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-24 pb-20">
-        {/* Decorative grid */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -262,7 +251,6 @@ export default function LandingPage() {
           }}
         />
 
-        {/* Hero Floating Particles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {[...Array(6)].map((_, i) => (
             <div
@@ -282,9 +270,7 @@ export default function LandingPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — Text */}
           <div className="text-center lg:text-left">
-            {/* Badge */}
             <FadeIn>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
                 <Sparkles className="h-3.5 w-3.5 text-theme-400" />
@@ -294,7 +280,6 @@ export default function LandingPage() {
               </div>
             </FadeIn>
 
-            {/* Heading */}
             <FadeIn delay={100}>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight">
                 The Future of
@@ -305,7 +290,6 @@ export default function LandingPage() {
               </h1>
             </FadeIn>
 
-            {/* Typewriter */}
             <FadeIn delay={200}>
               <p className="mt-6 text-lg sm:text-xl text-zinc-400 font-light max-w-lg mx-auto lg:mx-0">
                 <span>{typedText}</span>
@@ -316,7 +300,6 @@ export default function LandingPage() {
               </p>
             </FadeIn>
 
-            {/* CTA */}
             <FadeIn delay={350}>
               <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 {isLoggedIn ? (
@@ -347,7 +330,6 @@ export default function LandingPage() {
               </div>
             </FadeIn>
 
-            {/* Trust badges */}
             <FadeIn delay={500}>
               <div className="mt-10 flex items-center gap-6 justify-center lg:justify-start text-zinc-500 text-xs">
                 <div className="flex items-center gap-1.5">
@@ -366,15 +348,11 @@ export default function LandingPage() {
             </FadeIn>
           </div>
 
-          {/* Right — Chat Preview Mockup */}
           <FadeIn delay={300} className="hidden lg:block">
             <div className="relative">
-              {/* Glow behind card */}
               <div className="absolute -inset-8 bg-theme-500/10 rounded-3xl blur-3xl pointer-events-none" />
 
-              {/* Chat Window */}
               <div className="relative glass-surface-heavy rounded-3xl border border-white/10 overflow-hidden shadow-2xl shadow-black/40">
-                {/* Chat header */}
                 <div className="flex items-center gap-3 px-6 py-4 border-b border-white/8">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-theme-400 to-theme-600 flex items-center justify-center text-white text-sm font-bold">
                     A
@@ -393,7 +371,6 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* Chat messages */}
                 <div className="px-5 py-6 space-y-4 min-h-[280px]">
                   {CHAT_MESSAGES.map((msg, i) => (
                     <div
@@ -420,7 +397,6 @@ export default function LandingPage() {
                   ))}
                 </div>
 
-                {/* Chat input */}
                 <div className="px-5 py-4 border-t border-white/8">
                   <div className="flex items-center gap-3 bg-white/5 rounded-2xl px-4 py-3">
                     <input
@@ -436,7 +412,6 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Floating notification card */}
               <div
                 className="absolute -top-6 -right-6 glass-surface rounded-2xl border border-white/10 px-4 py-3 shadow-xl shadow-black/30"
                 style={{
@@ -454,7 +429,6 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Floating AI badge */}
               <div
                 className="absolute -bottom-4 -left-6 glass-surface rounded-2xl border border-white/10 px-4 py-3 shadow-xl shadow-black/30"
                 style={{
@@ -475,7 +449,6 @@ export default function LandingPage() {
           </FadeIn>
         </div>
 
-        {/* Scroll indicator */}
         <a
           href="#features"
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-600 hover:text-zinc-400 transition-colors"
@@ -485,7 +458,6 @@ export default function LandingPage() {
         </a>
       </section>
 
-      {/* ════════════════ FEATURES ════════════════ */}
       <section id="features" className="relative py-28 px-6">
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-16">
@@ -505,7 +477,6 @@ export default function LandingPage() {
             {FEATURES.map((f, i) => (
               <FadeIn key={f.title} delay={i * 80}>
                 <div className="group relative glass-surface rounded-2xl border border-white/8 p-7 hover:border-theme-500/30 hover:bg-white/[0.04] transition-all duration-500 cursor-default h-full">
-                  {/* Hover glow */}
                   <div className="absolute inset-0 rounded-2xl bg-theme-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                   <div className="relative z-10">
@@ -526,7 +497,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════ LIVE PREVIEW ════════════════ */}
       <section id="preview" className="relative py-28 px-6">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-16">
@@ -544,12 +514,9 @@ export default function LandingPage() {
 
           <FadeIn>
             <div className="relative">
-              {/* Glow */}
               <div className="absolute -inset-12 bg-theme-500/8 rounded-3xl blur-3xl pointer-events-none" />
 
-              {/* Browser window mockup */}
               <div className="relative glass-surface-heavy rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/50">
-                {/* Browser bar */}
                 <div className="flex items-center gap-3 px-5 py-3 border-b border-white/8 bg-white/[0.02]">
                   <div className="flex gap-2">
                     <div className="w-3 h-3 rounded-full bg-red-500/70" />
@@ -563,9 +530,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* App Mockup Content */}
                 <div className="flex min-h-[420px]">
-                  {/* Sidebar */}
                   <div className="w-72 border-r border-white/8 p-4 hidden sm:block">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-theme-gradient">
@@ -574,7 +539,6 @@ export default function LandingPage() {
                       <span className="text-sm font-bold text-white">Chatify</span>
                     </div>
 
-                    {/* Chat list */}
                     {[
                       { name: "Alex Johnson", msg: "The UI is insane! 🔥", online: true, time: "2m" },
                       { name: "Sarah Chen", msg: "Let's meet at 5pm", online: true, time: "15m" },
@@ -611,9 +575,7 @@ export default function LandingPage() {
                     ))}
                   </div>
 
-                  {/* Main chat area */}
                   <div className="flex-1 flex flex-col">
-                    {/* Header */}
                     <div className="flex items-center gap-3 px-6 py-4 border-b border-white/8">
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-theme-400 to-theme-600 flex items-center justify-center text-white text-sm font-bold">
                         A
@@ -624,7 +586,6 @@ export default function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Messages */}
                     <div className="flex-1 p-5 space-y-3 overflow-hidden">
                       {CHAT_MESSAGES.map((msg) => (
                         <div key={msg.id} className={`flex ${msg.self ? "justify-end" : "justify-start"}`}>
@@ -640,7 +601,6 @@ export default function LandingPage() {
                       ))}
                     </div>
 
-                    {/* Input */}
                     <div className="px-5 py-3 border-t border-white/8">
                       <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-2.5">
                         <input
@@ -662,7 +622,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════ TECH STACK ════════════════ */}
       <section id="tech" className="relative py-28 px-6">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-16">
@@ -731,17 +690,13 @@ export default function LandingPage() {
             ].map((tech, i) => (
               <FadeIn key={tech.name} delay={i * 80}>
                 <div className="group relative glass-surface rounded-2xl border border-white/8 p-6 hover:border-white/15 transition-all duration-500 cursor-default h-full overflow-hidden">
-                  {/* Hover gradient glow */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none rounded-2xl`} />
 
                   <div className="relative z-10">
-                    {/* Icon */}
-                    <div className={`w-12 h-12 rounded-xl ${tech.iconBg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`w-12 h-12 rounded-xl ${tech.iconBg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       <span className={`text-lg font-extrabold ${tech.iconColor}`}>{tech.letter}</span>
                     </div>
-                    {/* Name */}
                     <h3 className="text-base font-semibold text-white mb-1.5">{tech.name}</h3>
-                    {/* Desc */}
                     <p className="text-sm text-zinc-400 leading-relaxed">{tech.desc}</p>
                   </div>
                 </div>
@@ -751,7 +706,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════ TESTIMONIALS ════════════════ */}
       <section className="relative py-28 px-6">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-16">
@@ -787,7 +741,6 @@ export default function LandingPage() {
             ].map((t, i) => (
               <FadeIn key={i} delay={i * 100}>
                 <div className="glass-surface rounded-2xl border border-white/8 p-7 hover:border-theme-500/20 transition-all duration-500 h-full flex flex-col">
-                  {/* Stars */}
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, s) => (
                       <Star key={s} className="h-4 w-4 text-amber-400 fill-amber-400" />
@@ -812,11 +765,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════ FINAL CTA ════════════════ */}
       <section className="relative py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <FadeIn>
-            {/* Big glow behind */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[500px] h-[500px] bg-theme-500/10 rounded-full blur-[120px]" />
             </div>
@@ -862,7 +813,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════════ FOOTER ════════════════ */}
       <footer className="border-t border-white/8 px-6 py-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">

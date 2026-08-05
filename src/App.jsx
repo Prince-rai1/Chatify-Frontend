@@ -29,12 +29,10 @@ function App() {
     return (
       <div className="h-screen w-screen overflow-hidden flex justify-center items-center bg-zinc-950 relative">
         <ThreeBackground />
-        {/* Center Loader */}
         <div className="relative z-10 flex flex-col items-center gap-3">
           <div className="animate-spin text-theme-500">
             <Loader className="w-12 h-12" />
           </div>
-          {/* Optional: Chhota sa loading text jo acha dikhta hai */}
           <span className="text-zinc-400 text-sm font-medium animate-pulse">
             Please wait...
           </span>

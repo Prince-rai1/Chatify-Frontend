@@ -26,7 +26,6 @@ function EditableField({
     },
   });
 
-  // Agar parent se value change ho jaye to form bhi update ho
   useEffect(() => {
     reset({
       [fieldname]: value,

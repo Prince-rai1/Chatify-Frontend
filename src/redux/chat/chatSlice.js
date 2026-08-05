@@ -51,30 +51,24 @@ const chatSlice = createSlice({
           ? newMessage.receiver
           : newMessage.sender;
 
-      // Chat find karo
       const index = state.chats.findIndex((chat) => chat._id === partnerId);
 
       if (index === -1) return;
 
-      // Chat copy nikalo
       const chat = state.chats[index];
 
-      // Latest Message
       chat.lastMessage =
         newMessage.message || (newMessage.images?.length ? "📷 Photo" : "");
 
 
       chat.lastImages = newMessage.images;
       
-      // Latest Time
       chat.lastMessageTime = newMessage.createdAt;
 
-      // Unread Count
       if (newMessage.sender !== currentUserId && selectedChatId !== partnerId) {
         chat.unreadCount += 1;
       }
 
-      // Move Top
       state.chats.splice(index, 1);
 
       state.chats.unshift(chat);

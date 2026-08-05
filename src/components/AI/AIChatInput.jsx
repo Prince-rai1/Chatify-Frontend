@@ -70,12 +70,10 @@ function AIChatInput() {
       });
 
       if (fileType.startsWith("image/")) {
-        // Optimistic UI preview for image
         filePreviewUrl = URL.createObjectURL(fileToSend); 
       }
     }
 
-    // Add user message optimistically
     const tempMessageId = `temp-${Date.now()}`;
     dispatch(
       addAiMessage({
@@ -90,7 +88,6 @@ function AIChatInput() {
       })
     );
 
-    // Start streaming
     dispatch(setStreaming(true));
     dispatch(clearStreamingText());
 
@@ -106,7 +103,6 @@ function AIChatInput() {
       if (fileToSend) {
         dispatch(updateAiMessage({ _id: tempMessageId, isLoading: false }));
       }
-      // Response is streamed via socket — ai:end handler will finalize
     } catch (error) {
       console.error("AI chat error:", error);
       toast.error(error.response?.data?.message || "Failed to send message to AI");
@@ -117,7 +113,6 @@ function AIChatInput() {
 
   return (
     <div className="p-2 sm:p-4">
-      {/* File Preview */}
       {selectedFile && (
         <div className="mb-2 ml-4 flex items-center gap-2 rounded-lg bg-zinc-900/80 px-3 py-2 border border-white/10 w-max shadow-sm backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
           {selectedFile.type.startsWith("image/") ? (
@@ -140,7 +135,6 @@ function AIChatInput() {
 
       <div className="flex items-center gap-2 rounded-full border border-white/5 glass-input px-3 py-1 sm:gap-3 sm:rounded-full sm:px-4 sm:py-1">
         
-        {/* Attachment Button */}
         <input 
           type="file" 
           ref={fileInputRef} 
@@ -157,7 +151,6 @@ function AIChatInput() {
           <Paperclip size={20} />
         </button>
 
-        {/* Text Input */}
         <textarea
           ref={textareaRef}
           value={message}
@@ -179,7 +172,6 @@ function AIChatInput() {
           }}
         />
 
-        {/* Send Button */}
         <button
           type="button"
           disabled={(!message.trim() && !selectedFile) || isStreaming}
